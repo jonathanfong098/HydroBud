@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+// components
 import Alert from "../../components/Alert"
 
+// hooks
 import useInput from "../../hooks/use-input"
 import useAlert from "../../hooks/use-alert"
 // import { useAuth } from "../../context/AuthContext"
@@ -16,40 +19,43 @@ const Signup = () => {
     // const authContext = useAuth()
     const router = useRouter()
 
-    const {inputState: emailState, dispatchInput: dispatchEmail} = useInput(validateEmail)
+    const {
+        inputState: emailState, 
+        dispatchInput: dispatchEmail, 
+        touchValueInput: touchEmailInput,
+        valueInputIsInvalid: emailInputIsInvalid
+    } = useInput(validateEmail)
     const {value: email, valueIsValid: emailIsValid, errorMessage: emailError} = emailState
     const emailChangeHandler = (event) => {
         dispatchEmail({type:'USER_INPUT', value: event.target.value})
-        if (!emailInputTouched){
-            setEmailInputTouched(true)
-        }
+        touchEmailInput()
     }
-    const [emailInputTouched, setEmailInputTouched] = useState(false)
-    const emailInputIsInvalid = !emailIsValid && emailInputTouched
 
-    // manages name input
-    const {inputState: usernameState, dispatchInput: dispatchUsername} = useInput(validateUsername)
+    // manages username input
+    const {
+        inputState: usernameState, 
+        dispatchInput: dispatchUsername,
+        touchValueInput: touchUsernameInput,
+        valueInputIsInvalid: usernameInputIsInvalid
+    } = useInput(validateUsername)
     const {value: username, valueIsValid: usernameIsValid, errorMessage: usernameError} = usernameState
     const usernameChangeHandler = (event) => {
         dispatchUsername({type:'USER_INPUT', value: event.target.value})
-        if (!usernameInputTouched){
-            setUsernameInputTouched(true)
-        }
+        touchUsernameInput()
     }
-    const [usernameInputTouched, setUsernameInputTouched] = useState(false)
-    const usernameInputIsInvalid = !usernameIsValid && usernameInputTouched
 
     // manages password input
-    const {inputState: passwordState, dispatchInput: dispatchPassword} = useInput(validatePassword)
+    const {
+        inputState: passwordState, 
+        dispatchInput: dispatchPassword,
+        touchValueInput: touchPasswordInput,
+        valueInputIsInvalid: passwordInputIsInvalid
+    } = useInput(validatePassword)
     const {value: password, valueIsValid: passwordIsValid, errorMessage: passwordError} = passwordState
-    const[passwordInputTouched, setPasswordInputTouched] = useState(false)
     const passwordChangeHandler = (event) => {
         dispatchPassword({type:'USER_INPUT', value: event.target.value})
-        if (!passwordInputTouched) {
-            setPasswordInputTouched(true)
-        }
+        touchPasswordInput()
     }
-    const passwordInputIsInvalid = !passwordIsValid && passwordInputTouched
 
     // manages confirm password input
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -92,10 +98,10 @@ const Signup = () => {
     return(
         <div className='flex flex-row h-screen w-screen'>
             <Alert isOpen={alertIsOpen} closeModal={closeAlert} isError={true} title={"Error"} message={alertMessage}/>
-            <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'/>
+            <div className='flex w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'/>
             <div className='flex w-3/5 h-full justify-center'>
                 <form 
-                    className='flex flex-col w-2/5 max-[20rem] h-full justify-center space-y-[1.5rem]' 
+                    className={`flex flex-col w-2/5 max-[20rem] h-full justify-center space-y-[0.9rem]`}
                     onSubmit={signupHandler}
                 >
                     {/* email text box*/}
@@ -195,12 +201,19 @@ const Signup = () => {
 
                     <div className="flex justify-center">
                         <button 
-                            className={`h-[5rem] w-[9rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]`}
+                            className={`h-[4.3rem] w-[12rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]`}
                             onClick={signupHandler}
                             disabled={!formIsValid}
                         >
                             Sign Up
                         </button>
+                    </div>
+
+                    <div className="flex justify-center">
+                        Already Have an Account 
+                        <Link href='/login'>
+                            <div className="text-blue-500 hover:text-blue-800">Login</div>
+                        </Link>
                     </div>
                 </form>
             </div>
