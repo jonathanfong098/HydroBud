@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react'
+import React, {useReducer, useState, useEffect} from 'react'
 
 const useInput = (validateValue) => {
     const inputReducer = (state, action) => {
@@ -26,11 +26,26 @@ const useInput = (validateValue) => {
         value: '',
         valueIsValid: false,
         errorMessage: '',
-      })
+    })
+    
+    // const [valueInputTouched, setValueInputTouched] = useState(false)
+    // const touchValueInput = () => {
+    //   if (!valueInputTouched){
+    //     setValueInputTouched(true)
+    //   }
+    // }
+
+    // const [valueInputIsInvalid, setValueInputIsInvalid] = useState(true)
+    // useEffect(() => {
+    //   const result = !emailIsValid && emailInputTouched
+    //   setValueInputIsInvalid(result)
+    // }, [inputState.valueIsValid, valueInputTouched])
 
     return {
       inputState: inputState,
       dispatchInput: dispatchInput,
+      // valueInputTouched: valueInputTouched
+      // touchValueInput: touchValueInput
     }
 }
 

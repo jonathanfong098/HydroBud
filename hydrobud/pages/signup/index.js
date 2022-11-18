@@ -1,63 +1,135 @@
 import React, { useState } from "react"
-import Input from '../../components/input'
-import Button from "../../components/button"
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+
+import Alert from "../../components/Alert"
 
 import useInput from "../../hooks/use-input"
-import { validatePassword, validateConfirmPassword } from "../../utils/validateInput"
+import useAlert from "../../hooks/use-alert"
+// import { useAuth } from "../../context/AuthContext"
+import { validatePassword, validateConfirmPassword, validateUsername, validateEmail } from "../../utils/validateInput"
+import { signup } from '../../services/firebase/firebase-auth'
 
-const SignUp = () => {
+
+const Signup = () => {
+    // // auth state
+    // const authContext = useAuth()
+    const router = useRouter()
+
+    const {inputState: emailState, dispatchInput: dispatchEmail} = useInput(validateEmail)
+    const {value: email, valueIsValid: emailIsValid, errorMessage: emailError} = emailState
+    const emailChangeHandler = (event) => {
+        dispatchEmail({type:'USER_INPUT', value: event.target.value})
+        if (!emailInputTouched){
+            setEmailInputTouched(true)
+        }
+    }
+    const [emailInputTouched, setEmailInputTouched] = useState(false)
+    const emailInputIsInvalid = !emailIsValid && emailInputTouched
+
+    // manages name input
+    const {inputState: usernameState, dispatchInput: dispatchUsername} = useInput(validateUsername)
+    const {value: username, valueIsValid: usernameIsValid, errorMessage: usernameError} = usernameState
+    const usernameChangeHandler = (event) => {
+        dispatchUsername({type:'USER_INPUT', value: event.target.value})
+        if (!usernameInputTouched){
+            setUsernameInputTouched(true)
+        }
+    }
+    const [usernameInputTouched, setUsernameInputTouched] = useState(false)
+    const usernameInputIsInvalid = !usernameIsValid && usernameInputTouched
+
+    // manages password input
     const {inputState: passwordState, dispatchInput: dispatchPassword} = useInput(validatePassword)
     const {value: password, valueIsValid: passwordIsValid, errorMessage: passwordError} = passwordState
+    const[passwordInputTouched, setPasswordInputTouched] = useState(false)
     const passwordChangeHandler = (event) => {
         dispatchPassword({type:'USER_INPUT', value: event.target.value})
         if (!passwordInputTouched) {
             setPasswordInputTouched(true)
         }
     }
-    const[passwordInputTouched, setPasswordInputTouched] = useState(false)
     const passwordInputIsInvalid = !passwordIsValid && passwordInputTouched
 
+    // manages confirm password input
     const [confirmPassword, setConfirmPassword] = useState('')
+    const {valueIsValid: confirmPasswordIsValid, errorMessage: confirmPasswordError} = validateConfirmPassword(password, confirmPassword)
+    const[confirmPasswordInputTouched, setConfirmPasswordInputTouched] = useState(false)
     const confirmPasswordChangeHandler = (event) => {
         setConfirmPassword(event.target.value)
         if (!confirmPasswordInputTouched) {
             setConfirmPasswordInputTouched(true)
         }
     }
-    const {valueIsValid: confirmPasswordIsValid, errorMessage: confirmPasswordError} = validateConfirmPassword(password, confirmPassword)
-    const[confirmPasswordInputTouched, setConfirmPasswordInputTouched] = useState(false)
     const confirmPasswordInputIsInvalid = (!passwordIsValid && confirmPasswordInputTouched) || (!confirmPasswordIsValid && confirmPasswordInputTouched) 
 
+    // manages whether password is visible 
     const [passwordVisible, setPasswordVisible] = useState(true)
     const showPassword = (event) => {
         event.preventDefault()
         setPasswordVisible(!passwordVisible)
     }
 
-    const signupHandler = (event) => {
+    const signupHandler = async (event) => {
         event.preventDefault()
+        console.log("Form: Signing Up")
+
+        try {
+            await signup(email, password)
+            router.push('/dashboard')
+        } catch (error) {
+            setAlertMessage(error.code)
+            openAlert()
+        }
     }
+    
+    //manage alert state
+    const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
+
+    // manages if form can be submitted 
+    const formIsValid = emailIsValid && usernameIsValid && passwordIsValid && confirmPasswordIsValid 
 
     return(
         <div className='flex flex-row h-screen w-screen'>
-            <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'></div>
-            <div className='flex w-3/5 justify-center'>
+            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isError={true} title={"Error"} message={alertMessage}/>
+            <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'/>
+            <div className='flex w-3/5 h-full justify-center'>
                 <form 
-                    className='flex flex-col w-2/5 h-full justify-center space-y-[4rem]' 
+                    className='flex flex-col w-2/5 max-[20rem] h-full justify-center space-y-[1.5rem]' 
                     onSubmit={signupHandler}
                 >
+                    {/* email text box*/}
+                    <div>
+                        <label htmlFor='email' className='text-[2rem] font-semibold'>Email</label>
+                        <div className={`flex flex-row w-full h-[4rem] bg-[#D7D9DE] rounded-[1rem] border-[0.13rem] ${emailInputIsInvalid ? 'border-[#EE392F]' : 'border-[#FAFAFA]'} focus:outline-none ${emailInputIsInvalid ? '' : 'focus-within:border-[#7A7A7A]'}`}>
+                            <input
+                                name='email'
+                                type='text'
+                                className='w-full h-full mx-[1rem] bg-transparent text-[1.5rem] focus:outline-none'
+                                value={email}
+                                onChange={emailChangeHandler}
+                                onBlur={emailChangeHandler}
+                            />
+                        </div>
+                        {emailChangeHandler && (<div className='text-[0.8rem] text-[#EE392F] ml-[1rem]'>{emailError}</div>)}
+                    </div>
+
+                    {/* username text box*/}
                     <div>
                         <label htmlFor='username' className='text-[2rem] font-semibold'>Username</label>
-                        <div className='flex w-full h-[4rem] bg-[#D7D9DE] rounded-[1rem] focus:outline-none focus:border-[0.13rem] focus:border-[#7A7A7A]'>
+                        <div className={`flex flex-row w-full h-[4rem] bg-[#D7D9DE] rounded-[1rem] border-[0.13rem] ${usernameInputIsInvalid ? 'border-[#EE392F]' : 'border-[#FAFAFA]'} focus:outline-none ${usernameInputIsInvalid ? '' : 'focus-within:border-[#7A7A7A]'}`}>
                             <input
                                 name='username'
                                 type='text'
                                 className='w-full h-full mx-[1rem] bg-transparent text-[1.5rem] focus:outline-none'
-                            >
-                            </input>
+                                value={username}
+                                onChange={usernameChangeHandler}
+                                onBlur={usernameChangeHandler}
+                            />
                         </div>
+                        {usernameInputIsInvalid && (<div className='text-[0.8rem] text-[#EE392F] ml-[1rem]'>{usernameError}</div>)}
                     </div>
+
 
                     {/* password text box*/}
                     <div>
@@ -72,6 +144,7 @@ const SignUp = () => {
                                 className={`w-3/4 h-full ml-[1rem] bg-transparent text-[1.5rem] focus:outline-none`}
                                 value={password}
                                 onChange={passwordChangeHandler}
+                                onBlur={passwordChangeHandler}
                             />
                             <div className='flex justify-center items-center w-1/4 h-full'>
                                 <button 
@@ -86,7 +159,7 @@ const SignUp = () => {
                                 </button>
                             </div>
                         </div>
-                        {passwordInputIsInvalid && (<div className='text-[12px] text-[#BD180F] font-montserrat_regular mx-[16px]'>{passwordError}</div>)}
+                        {passwordInputIsInvalid && (<div className='text-[0.8rem] text-[#EE392F] ml-[1rem]'>{passwordError}</div>)}
                     </div>
 
                     {/* confirm password text box*/}
@@ -102,6 +175,7 @@ const SignUp = () => {
                                 className={`w-3/4 h-full ml-[1rem] bg-transparent text-[1.5rem] focus:outline-none`}
                                 value={confirmPassword}
                                 onChange={confirmPasswordChangeHandler}
+                                onBlur={confirmPasswordChangeHandler}
                             />
                             <div className='flex justify-center items-center w-1/4 h-full'>
                                 <button 
@@ -116,22 +190,22 @@ const SignUp = () => {
                                 </button>
                             </div>
                         </div>
-                        {(!confirmPasswordIsValid && confirmPasswordInputTouched) && (<div className='text-[12px] text-[#BD180F] font-montserrat_regular mx-[16px]'>{confirmPasswordError}</div>)}
+                        {(!confirmPasswordIsValid && confirmPasswordInputTouched) && (<div className='text-[0.7rem] text-[#EE392F] ml-[1rem]'>{confirmPasswordError}</div>)}
                     </div>
 
                     <div className="flex justify-center">
                         <button 
                             className={`h-[5rem] w-[9rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]`}
                             onClick={signupHandler}
+                            disabled={!formIsValid}
                         >
                             Sign Up
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
     )
 }
 
-export default SignUp
+export default Signup
