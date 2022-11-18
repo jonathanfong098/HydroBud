@@ -82,6 +82,6 @@ const validateConfirmPassword = (valueToCheck, valueToCheckAgainst) => {
     }
 }
 
-export { validatePassword, validateConfirmPassword, validateUsername, validateEmail }
+export { validatePassword, validateConfirmPassword, validateUsername, validateEmail}
 
  
