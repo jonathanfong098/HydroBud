@@ -28,24 +28,25 @@ const useInput = (validateValue) => {
         errorMessage: '',
     })
     
-    // const [valueInputTouched, setValueInputTouched] = useState(false)
-    // const touchValueInput = () => {
-    //   if (!valueInputTouched){
-    //     setValueInputTouched(true)
-    //   }
-    // }
+    const [valueInputTouched, setValueInputTouched] = useState(false)
+    const touchValueInput = () => {
+      if (!valueInputTouched){
+        setValueInputTouched(true)
+      }
+    }
 
-    // const [valueInputIsInvalid, setValueInputIsInvalid] = useState(true)
-    // useEffect(() => {
-    //   const result = !emailIsValid && emailInputTouched
-    //   setValueInputIsInvalid(result)
-    // }, [inputState.valueIsValid, valueInputTouched])
+    const [valueInputIsInvalid, setValueInputIsInvalid] = useState(false)
+    useEffect(() => {
+      const result = !inputState.valueIsValid && valueInputTouched
+      setValueInputIsInvalid(result)
+    }, [inputState.valueIsValid, valueInputTouched])
 
     return {
       inputState: inputState,
       dispatchInput: dispatchInput,
-      // valueInputTouched: valueInputTouched
-      // touchValueInput: touchValueInput
+      valueInputTouched: valueInputTouched,
+      touchValueInput: touchValueInput,
+      valueInputIsInvalid: valueInputIsInvalid
     }
 }
 
