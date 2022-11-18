@@ -1,5 +1,5 @@
 import { firebaseAuth } from "./firebase-config"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 
 const signup = async (email, password) => {
     console.log("Signing Up")
@@ -15,7 +15,22 @@ const logout = () => {
 }
 
 const resetPassword = (email) => {
-    return auth.sendPasswordResetEmail(email)
+    return sendPasswordResetEmail(firebaseAuth, email)
 }
 
-export { signup, login, logout, resetPassword }
+const errorMessage = (error) => {
+  switch(error){
+    case 'auth/user-not-found':
+      return 'Email does not exist'
+    case 'auth/wrong-password':
+      return 'Password is incorrect'
+    case 'auth/invalid-email':
+      return 'Email is invalid'
+    case 'auth/missing-email':
+      return 'Email is missing'
+    default:
+      return 'Error completing request'
+  }
+}
+
+export { signup, login, logout, resetPassword, errorMessage }
