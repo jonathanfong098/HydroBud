@@ -81,7 +81,7 @@ const Signup = () => {
         console.log("Form: Signing Up")
 
         try {
-            await signup(email, password)
+            await signup(email, username, password)
             router.push('/dashboard')
         } catch (error) {
             setAlertMessage(error.code)

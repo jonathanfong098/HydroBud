@@ -1,14 +1,36 @@
-import { firebaseAuth } from "./firebase-config"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
+import { collection, addDoc, doc, setDoc } from "firebase/firestore"
+import { firebaseAuth, firebaseDB } from "./firebase-config"
 
-const signup = async (email, password) => {
-    console.log("Signing Up")
-    return createUserWithEmailAndPassword(firebaseAuth, email, password)
+
+// const signup = async (email, password) => {
+//     // console.log("Signing Up")
+
+//     return createUserWithEmailAndPassword(firebaseAuth, email, password)
+// }
+
+const signup = async (email, username, password) => {
+
+  try {
+    await createUserWithEmailAndPassword(firebaseAuth, email, password)
+  
+    try {
+      await setDoc(doc(firebaseDB, 'users', firebaseAuth.currentUser.uid), {
+        email: email,
+        username: username
+      })
+    } catch (error) {
+      console.log('Something went wrong with added user to firestore: ', error)
+    }
+    
+  } catch (error) {
+    console.log('Something went wrong with sign up: ', error);
   }
+}
 
 const login = async (email, password) => {
     return signInWithEmailAndPassword(firebaseAuth, email, password)
-  }
+}
 
 const logout = () => {
     return firebaseAuth.signOut()

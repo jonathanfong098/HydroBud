@@ -11,11 +11,20 @@ import Alert from "../../components/Alert"
 // hooks
 import useAlert from "../../hooks/use-alert"
 
+// import { useAuth } from "../../context/AuthContext"
+
 import { login, errorMessage} from '../../services/firebase/firebase-auth'
 
 
 const Login = () => {
     const router = useRouter()
+
+    // const { currentUser } = useAuth()
+    // console.log(authContext.currentUser)
+    // if (currentUser) {
+    //     router.push('/dashboard')
+    // }
+
 
     const [email, setEmail] = useState('')
     const emailChangeHandler = (event) => {
