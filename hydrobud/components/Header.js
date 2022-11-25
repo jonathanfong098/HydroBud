@@ -1,15 +1,21 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+
 import { logout } from '../services/firebase/firebase-auth'
 import { SIGN_IN_REDIRECT_KEY, clearRedirect } from '../utils/redirect'
 
+// importing custom context
+import { useAuthContext } from '../context/AuthContext'
+
 const Header = ({children}) => {
+    const { setCurrentUser } = useAuthContext()
     const router = useRouter()
 
     const logoutHandler = () => {
         logout()
         router.push('/login')
+        setCurrentUser(null)
         clearRedirect(SIGN_IN_REDIRECT_KEY)
     }
 

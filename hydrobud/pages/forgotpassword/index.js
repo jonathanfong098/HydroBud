@@ -1,13 +1,11 @@
-import React, { useState } from "react"
-import Link from "next/link"
-// import Input from '../../components/input'
-// import Button from "../../components/button"
+import React, { useState } from 'react'
+import Link from 'next/link'
 
-// components
-import Alert from "../../components/Alert"
+// importing custom components
+import Alert from '../../components/Alert'
 
-// hooks
-import useAlert from "../../hooks/use-alert"
+// importing custom hooks
+import useAlert from '../../hooks/use-alert'
 
 import { resetPassword, errorMessage } from '../../services/firebase/firebase-auth'
 
@@ -31,9 +29,6 @@ const ForgotPassword = () => {
         } catch (error) {
             console.log(error.code)
             setIsError(true)
-            // if (error.code === 'auth/user-not-found'){
-            //     setAlertMessage('Email does not exist')
-            // }
             setAlertMessage(errorMessage(error.code))
             openAlert()
         }
@@ -61,7 +56,7 @@ const ForgotPassword = () => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         <button 
                             className='h-[4.5rem] w-[17rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]'
                             onClick={resetPasswordHandler}
@@ -70,9 +65,9 @@ const ForgotPassword = () => {
                         </button>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                             <Link href='/login'>
-                                <div className="text-[1.5rem] text-blue-500 hover:text-blue-800">Login</div>
+                                <div className='text-[1.5rem] text-blue-500 hover:text-blue-800'>Login</div>
                             </Link>
                         </div>
 

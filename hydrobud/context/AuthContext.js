@@ -1,10 +1,12 @@
-import React, { useContext, createContext, useState, useEffect } from "react"
+import React, { useContext, createContext, useState, useEffect } from 'react'
+import { onAuthStateChanged } from 'firebase/auth'
 
-import { onAuthStateChanged } from "firebase/auth";
-import { firebaseAuth } from "../services/firebase/firebase-config"
+import { firebaseAuth } from '../services/firebase/firebase-config'
 
 const DefaultAuthContext = {
-    currentUser: null
+    currentUser: null,
+    setCurrentUser: () => {},
+    initializing: true
 }
 
 const AuthContext = createContext(DefaultAuthContext)
@@ -28,6 +30,7 @@ const AuthProvider = ({ children }) => {
 
     const authContext = { 
         currentUser: currentUser,
+        setCurrentUser: setCurrentUser,
         initializing: initializing
     }
 

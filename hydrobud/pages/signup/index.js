@@ -1,22 +1,19 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// components
-import Alert from "../../components/Alert"
-
-// hooks
-import useInput from "../../hooks/use-input"
-import useAlert from "../../hooks/use-alert"
-// import { useAuth } from "../../context/AuthContext"
-import { validatePassword, validateConfirmPassword, validateUsername, validateEmail } from "../../utils/validateInput"
+import { validatePassword, validateConfirmPassword, validateUsername, validateEmail } from '../../utils/validateInput'
 import { signup } from '../../services/firebase/firebase-auth'
 
+// importing custom components
+import Alert from '../../components/Alert'
+
+// importing custom hooks
+import useInput from '../../hooks/use-input'
+import useAlert from '../../hooks/use-alert'
 
 const Signup = () => {
-    // // auth state
-    // const authContext = useAuth()
     const router = useRouter()
 
     const {
@@ -78,7 +75,7 @@ const Signup = () => {
 
     const signupHandler = async (event) => {
         event.preventDefault()
-        console.log("Form: Signing Up")
+        console.log('Form: Signing Up')
 
         try {
             await signup(email, username, password)
@@ -97,7 +94,7 @@ const Signup = () => {
 
     return(
         <div className='flex flex-row h-screen w-screen'>
-            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={"Error"} alertMessage={alertMessage}/>
+            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={'Error'} alertMessage={alertMessage}/>
             <div className='flex w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'/>
             <div className='flex w-3/5 h-full justify-center'>
                 <form 
@@ -199,7 +196,7 @@ const Signup = () => {
                         {(!confirmPasswordIsValid && confirmPasswordInputTouched) && (<div className='text-[0.7rem] text-[#EE392F] ml-[1rem]'>{confirmPasswordError}</div>)}
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         <button 
                             className={`h-[4.3rem] w-[12rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#9CBA96]`}
                             onClick={signupHandler}
@@ -209,10 +206,10 @@ const Signup = () => {
                         </button>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         Already Have an Account 
                         <Link href='/login'>
-                            <div className="text-blue-500 hover:text-blue-800">Login</div>
+                            <div className='text-blue-500 hover:text-blue-800'>Login</div>
                         </Link>
                     </div>
                 </form>

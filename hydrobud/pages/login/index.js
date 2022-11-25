@@ -11,9 +11,8 @@ import Alert from "../../components/Alert"
 // hooks
 import useAlert from "../../hooks/use-alert"
 
-// import { useAuth } from "../../context/AuthContext"
-
 import { login, errorMessage} from '../../services/firebase/firebase-auth'
+import { SIGN_IN_REDIRECT_KEY, getRedirect } from "../../utils/redirect"
 
 
 const Login = () => {
@@ -51,14 +50,13 @@ const Login = () => {
 
         try {
             await login(email, password)
-            router.push('/dashboard')
+            if (getRedirect(SIGN_IN_REDIRECT_KEY)){
+                router.push(getRedirect(SIGN_IN_REDIRECT_KEY))
+            } else {
+                router.push('/dashboard')
+            }
         } catch (error) {
             console.log(error.code)
-            // if (error.code === 'auth/user-not-found'){
-            //     setAlertMessage('Email does not exist')
-            // } else if (error.code === 'auth/wrong-password'){
-            //     setAlertMessage('Password is incorrect')
-            // }
             setAlertMessage(errorMessage(error.code))
             openAlert()
         }

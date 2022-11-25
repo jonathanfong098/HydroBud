@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react'
 
+// importing custom components
 import Header from '../../components/Header'
-import DeviceCardList from "../../components/Devices/DeviceCardList"
-import { useDeviceContext } from "../../context/DeviceContext";
+import DeviceCardList from '../../components/Devices/DeviceCardList'
 
-import { collection, getDocs } from "firebase/firestore";
-import { firebaseDB } from "../../services/firebase/firebase-config"
+// importing custom context
+import { useDeviceContext } from '../../context/DeviceContext'
 
 const device = {
     id: 12345,

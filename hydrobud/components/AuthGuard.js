@@ -1,8 +1,10 @@
-import { useEffect } from "react"
-import { useRouter } from "next/router"
-import { useAuthContext } from "../context/AuthContext"
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-import { SIGN_IN_REDIRECT_KEY, setRedirect} from "../utils/redirect";
+import { SIGN_IN_REDIRECT_KEY, setRedirect} from '../utils/redirect'
+
+// importing custom context
+import { useAuthContext } from '../context/AuthContext'
 
 const AuthGuard = ({children}) => { 
     const { currentUser, initializing } = useAuthContext()
@@ -14,7 +16,7 @@ const AuthGuard = ({children}) => {
           if (!currentUser) {
             // remember the page that user tried to access
             setRedirect(SIGN_IN_REDIRECT_KEY, router.route)
-            router.push("/login")
+            router.push('/login')
           }
         }
     }, [initializing, currentUser])

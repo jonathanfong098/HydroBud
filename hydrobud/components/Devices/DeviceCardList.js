@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import DeviceCard from "./DeviceCard";
+import React from "react"
+
+// importing custom components
+import DeviceCard from "./DeviceCard"
 
 const DeviceCardList = ({devices}) => {
     return (

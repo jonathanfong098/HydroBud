@@ -1,5 +1,7 @@
 import Image from 'next/image'
-import DeviceCardMenu from "./DeviceCardMenu";
+
+// importing custom components
+import DeviceCardMenu from "./DeviceCardMenu"
 
 const DeviceCard = ({device}) => {
     // console.log(device.image)
