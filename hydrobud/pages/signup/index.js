@@ -70,7 +70,7 @@ const Signup = () => {
     const confirmPasswordInputIsInvalid = (!passwordIsValid && confirmPasswordInputTouched) || (!confirmPasswordIsValid && confirmPasswordInputTouched) 
 
     // manages whether password is visible 
-    const [passwordVisible, setPasswordVisible] = useState(true)
+    const [passwordVisible, setPasswordVisible] = useState(false)
     const showPassword = (event) => {
         event.preventDefault()
         setPasswordVisible(!passwordVisible)
@@ -97,7 +97,7 @@ const Signup = () => {
 
     return(
         <div className='flex flex-row h-screen w-screen'>
-            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isError={true} title={"Error"} message={alertMessage}/>
+            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={"Error"} alertMessage={alertMessage}/>
             <div className='flex w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'/>
             <div className='flex w-3/5 h-full justify-center'>
                 <form 
@@ -201,7 +201,7 @@ const Signup = () => {
 
                     <div className="flex justify-center">
                         <button 
-                            className={`h-[4.3rem] w-[12rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]`}
+                            className={`h-[4.3rem] w-[12rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#9CBA96]`}
                             onClick={signupHandler}
                             disabled={!formIsValid}
                         >
