@@ -1,29 +1,27 @@
-import React, { useState } from "react"
-// import Input from '../../components/input'
-// import Button from "../../components/button"
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// components
-import Alert from "../../components/Alert" 
-
-// hooks
-import useAlert from "../../hooks/use-alert"
-
 import { login, errorMessage} from '../../services/firebase/firebase-auth'
-import { SIGN_IN_REDIRECT_KEY, getRedirect } from "../../utils/redirect"
+import { SIGN_IN_REDIRECT_KEY, getRedirect } from '../../utils/redirect'
 
+// importing custom components
+import Alert from '../../components/Alert' 
+
+// importing custom hooks
+import useAlert from '../../hooks/use-alert'
+
+// importing custom context
+import { useAuthContext } from '../../context/AuthContext'
 
 const Login = () => {
     const router = useRouter()
 
-    // const { currentUser } = useAuth()
-    // console.log(authContext.currentUser)
-    // if (currentUser) {
-    //     router.push('/dashboard')
-    // }
-
+    const { currentUser, initializing } = useAuthContext()
+    if (!initializing && currentUser) {
+        router.push('/dashboard')
+    }
 
     const [email, setEmail] = useState('')
     const emailChangeHandler = (event) => {
@@ -46,7 +44,7 @@ const Login = () => {
 
     const loginHandler = async (event) => {
         event.preventDefault()
-        console.log("Form: Signing Up")
+        console.log('Form: Signing Up')
 
         try {
             await login(email, password)
@@ -65,7 +63,7 @@ const Login = () => {
 
     return(
         <div className='flex flex-row h-screen w-screen'>
-            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={"Error"} alertMessage={alertMessage}/>
+            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={'Error'} alertMessage={alertMessage}/>
             <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'></div>
             <div className='flex w-3/5 justify-center'>
                 <form 
@@ -111,11 +109,11 @@ const Login = () => {
                             </div>
                         </div>
                         <Link href='/forgotpassword'>
-                            <div className="ml-[1rem] text-blue-500 hover:text-blue-800">Forgot Password?</div>
+                            <div className='ml-[1rem] text-blue-500 hover:text-blue-800'>Forgot Password?</div>
                         </Link>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         <button 
                             className={`h-[4.3rem] w-[10rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#9CBA96]`}
                             onClick={loginHandler}
@@ -124,10 +122,10 @@ const Login = () => {
                         </button>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                         Do Not Have an Account? 
                         <Link href='/signup'>
-                            <div className="text-blue-500 hover:text-blue-800">Sign Up</div>
+                            <div className='text-blue-500 hover:text-blue-800'>Sign Up</div>
                         </Link>
                     </div>
 

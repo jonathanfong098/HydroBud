@@ -13,8 +13,16 @@ import Alert from '../../components/Alert'
 import useInput from '../../hooks/use-input'
 import useAlert from '../../hooks/use-alert'
 
+// importing custom context
+import { useAuthContext } from '../../context/AuthContext'
+
 const Signup = () => {
     const router = useRouter()
+
+    const { currentUser, initializing } = useAuthContext()
+    if (!initializing && currentUser) {
+        router.push('/dashboard')
+    }
 
     const {
         inputState: emailState, 
