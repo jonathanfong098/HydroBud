@@ -20,7 +20,6 @@ const DevicesProvider = ({children}) => {
  
     useEffect(() => {
         if (!initializing && currentUser) {
-            console.log(currentUser)
             const unsubscribeDevices = createDevicesListener(currentUser.uid, setDevices)
         }
 

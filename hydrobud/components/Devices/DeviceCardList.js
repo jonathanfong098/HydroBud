@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import DeviceCard from "./DeviceCard";
 
 const DeviceCardList = ({devices}) => {
-    console.log(devices)
-
     return (
         <>
             <div className='h-full flex flex-col items-center space-y-[3rem] mt-[3rem] mb-[2rem] bg-[#F0F0F0]'>
