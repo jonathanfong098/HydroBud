@@ -2,9 +2,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/router"
 import { useAuthContext } from "../context/AuthContext"
 
-import { setRedirect, getRedirect, clearRedirect} from "../utils/redirect";
-
-const REDIRECT_KEY = 'sign_in_redirect'
+import { SIGN_IN_REDIRECT_KEY, setRedirect} from "../utils/redirect";
 
 const AuthGuard = ({children}) => { 
     const { currentUser, initializing } = useAuthContext()
@@ -15,7 +13,7 @@ const AuthGuard = ({children}) => {
           //auth is initialized and there is no user
           if (!currentUser) {
             // remember the page that user tried to access
-            setRedirect(REDIRECT_KEY, router.route)
+            setRedirect(SIGN_IN_REDIRECT_KEY, router.route)
             router.push("/login")
           }
         }

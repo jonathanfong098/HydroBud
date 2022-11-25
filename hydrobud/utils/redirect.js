@@ -1,4 +1,4 @@
-// const redirectKey = 'sign_in_redirect'
+const SIGN_IN_REDIRECT_KEY = 'sign_in_redirect'
 
 const setRedirect = (redirectKey, redirect) => {
     window.sessionStorage.setItem(redirectKey, redirect)
@@ -12,4 +12,4 @@ const clearRedirect = (redirectKey) => {
     return window.sessionStorage.removeItem(redirectKey)
 }
 
-export { setRedirect, getRedirect, clearRedirect }
+export { SIGN_IN_REDIRECT_KEY, setRedirect, getRedirect, clearRedirect }
