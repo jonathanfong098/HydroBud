@@ -1,7 +1,33 @@
-import { doc, collection, query, deleteDoc} from "firebase/firestore"
+import { doc, collection, query, where, onSnapshot, deleteDoc} from "firebase/firestore"
 import { firebaseDB } from "./firebase-config"
 
-const GET_DEVICES_QUERY = query(collection(firebaseDB, 'devices'))
+const getDevicesQuery = (userID) => {
+    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID))
+    return q
+} 
+
+const createDevicesListener = (userID, devicesCallback) => {
+    const unsubscribeDevices = onSnapshot(getDevicesQuery(userID), (snapshot) => {
+        //initialize device
+        snapshot.docs.map(doc => console.log(doc.data()))
+        const devices = snapshot.docs.map(doc => doc.data())
+        devicesCallback(devices)
+
+        // snapshot.docChanges().forEach((change) => {
+        //     if (change.type === "added") {
+        //         console.log("New device: ", change.doc.data());
+        //     }
+        //     if (change.type === "modified")s {
+        //         console.log("Modified device: ", change.doc.data());
+        //     }
+        //     if (change.type === "removed") {
+        //         console.log("Removed device: ", change.doc.data());
+        //     }
+        //   });
+    });
+
+    return unsubscribeDevices
+}
 
 const deleteDevice = async (deviceID) => {
     try {
@@ -12,4 +38,4 @@ const deleteDevice = async (deviceID) => {
     }
 }
 
-export { GET_DEVICES_QUERY, deleteDevice}
+export { getDevicesQuery, createDevicesListener, deleteDevice}

@@ -2,29 +2,15 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswor
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"
 import { firebaseAuth, firebaseDB } from "./firebase-config"
 
-
-// const signup = async (email, password) => {
-//     // console.log("Signing Up")
-
-//     return createUserWithEmailAndPassword(firebaseAuth, email, password)
-// }
-
 const signup = async (email, username, password) => {
-
   try {
     await createUserWithEmailAndPassword(firebaseAuth, email, password)
-  
-    try {
-      await setDoc(doc(firebaseDB, 'users', firebaseAuth.currentUser.uid), {
-        email: email,
-        username: username
-      })
-    } catch (error) {
-      console.log('Something went wrong with added user to firestore: ', error)
-    }
-    
+    await setDoc(doc(firebaseDB, 'users', firebaseAuth.currentUser.uid), {
+      email: email,
+      username: username
+    })
   } catch (error) {
-    console.log('Something went wrong with sign up: ', error);
+    throw error
   }
 }
 

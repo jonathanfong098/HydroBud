@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../../components/button'
+// import Button from '../../components/button'
 import Link from 'next/link'
 
 const Homepage = () => {

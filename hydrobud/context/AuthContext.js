@@ -15,24 +15,25 @@ const useAuthContext = () => {
 
 const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({})
-    const [loading, setLoading] = useState(true)
+    const [initializing, setInitializing] = useState(true)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(firebaseAuth, user => {
           setCurrentUser(user)
-          setLoading(false)
+          setInitializing(false)
         })
     
         return unsubscribe
       }, [])
 
     const authContext = { 
-        currentUser: currentUser
+        currentUser: currentUser,
+        initializing: initializing
     }
 
     return(
         <AuthContext.Provider value={authContext}>
-            {!loading && children}
+            {!initializing && children}
         </AuthContext.Provider>
     )
 }
