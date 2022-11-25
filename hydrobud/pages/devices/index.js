@@ -42,4 +42,6 @@ const Devices = () => {
     )
 }
 
+Devices.requireAuth = true
+
 export default Devices
