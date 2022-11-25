@@ -1,15 +1,13 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
 
-import { collection, addDoc, doc, setDoc, onSnapshot } from "firebase/firestore"
-import { firebaseDB } from "../services/firebase/firebase-config";
-
-import { GET_DEVICES_QUERY } from "../services/firebase/devices";
+import { createDevicesListener } from "../services/firebase/devices";
+import { useAuthContext } from "./AuthContext";
 
 const DefaultDevicesContext = {
     devices: []
 }
 
-const DevicesContext = createContext()
+const DevicesContext = createContext(DefaultDevicesContext)
 
 const useDeviceContext = () => {
     return useContext(DevicesContext)
@@ -18,26 +16,13 @@ const useDeviceContext = () => {
 const DevicesProvider = ({children}) => {
     const [devices, setDevices] = useState([])
     // const [unsubscribeDevices, setUnsubscribeDevices] = useState()
+    const { currentUser, initializing } = useAuthContext()
  
     useEffect(() => {
-        const unsubscribeDevices = onSnapshot(GET_DEVICES_QUERY, (snapshot) => {
-            //initialize device
-            snapshot.docs.map(doc => console.log(doc.data()))
-            const devices = snapshot.docs.map(doc => doc.data())
-            setDevices(devices)
-
-            // snapshot.docChanges().forEach((change) => {
-            //     if (change.type === "added") {
-            //         console.log("New device: ", change.doc.data());
-            //     }
-            //     if (change.type === "modified") {
-            //         console.log("Modified device: ", change.doc.data());
-            //     }
-            //     if (change.type === "removed") {
-            //         console.log("Removed device: ", change.doc.data());
-            //     }
-            //   });
-        });
+        if (!initializing && currentUser) {
+            console.log(currentUser)
+            const unsubscribeDevices = createDevicesListener(currentUser.uid, setDevices)
+        }
 
         // setUnsubscribeDevices(unsubscribeDevices)
     }, [])
