@@ -8,6 +8,7 @@ import { SIGN_IN_REDIRECT_KEY, getRedirect } from '../../utils/redirect'
 
 // importing custom components
 import Alert from '../../components/Alert' 
+import Button from '../../components/Button'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'
@@ -65,14 +66,14 @@ const Login = () => {
         <div className='flex flex-row h-screen w-screen'>
             <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={'Error'} alertMessage={alertMessage}/>
             <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'></div>
-            <div className='flex w-3/5 justify-center'>
+            <div className='flex w-3/5 justify-center bg-[#F0F0F0]'>
                 <form 
                     className='flex flex-col w-2/5 h-full justify-center space-y-[4rem]'
                     onSubmit={loginHandler}
                 >
                     <div>
                         <label htmlFor='email' className='text-[2rem] font-semibold'>Email</label>
-                        <div className={`flex flex-row w-full h-[4rem] bg-[#D7D9DE] rounded-[1rem] border-[0.13rem] border-[#FAFAFA] focus:outline-none focus-within:border-[#7A7A7A]`}>
+                        <div className={`flex flex-row w-full h-[4rem] bg-[#FFFFFF] rounded-[1rem] border-[0.13rem] border-[#FAFAFA] focus:outline-none focus-within:border-[#7A7A7A]`}>
                             <input
                                 name='email'
                                 type='text'
@@ -84,9 +85,14 @@ const Login = () => {
                     </div>
 
                     <div>
-                        <label htmlFor='password' className='text-[2rem] font-semibold'>Password</label>
+                        <label 
+                            htmlFor='password' 
+                            className='text-[2rem] font-semibold'
+                        >
+                            Password
+                        </label>
                         <div 
-                            className='flex flex-row w-full h-[4rem] bg-[#D7D9DE] rounded-[1rem] border-[0.13rem] border-[#FAFAFA] focus:outline-none focus-within:border-[#7A7A7A]'
+                            className='flex flex-row w-full h-[4rem] bg-[#FFFFFF] rounded-[1rem] border-[0.13rem] border-[#FAFAFA] focus:outline-none focus-within:border-[#7A7A7A]'
                         >
                             <input 
                                 name='password'
@@ -108,23 +114,18 @@ const Login = () => {
                                 </button>
                             </div>
                         </div>
-                        <Link href='/forgotpassword'>
+                        <Link href='/forgot-password'>
                             <div className='ml-[1rem] text-blue-500 hover:text-blue-800'>Forgot Password?</div>
                         </Link>
                     </div>
 
                     <div className='flex justify-center'>
-                        <button 
-                            className={`h-[4.3rem] w-[10rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#9CBA96]`}
-                            onClick={loginHandler}
-                        >
-                            Login
-                        </button>
+                        <Button onClickHandler={loginHandler}>Login</Button>
                     </div>
 
-                    <div className='flex justify-center'>
-                        Do Not Have an Account? 
-                        <Link href='/signup'>
+                    <div className='flex flex-row space-x-[0.5rem] justify-center'>
+                        <div>Do Not Have an Account? </div>
+                        <Link href='/sign-up'>
                             <div className='text-blue-500 hover:text-blue-800'>Sign Up</div>
                         </Link>
                     </div>

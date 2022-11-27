@@ -1,13 +1,13 @@
 import React from 'react'
 
 // importing custom component
-import Header from '../../components/Header'
+import HeaderPage from '../../components/layout/HeaderPage'
 
 const Dashboard = () => {
     return (
-        <div className='w-screen h-screen'>
-            <Header/>
-        </div>
+        <HeaderPage>
+            <div>Dashboard</div>
+        </HeaderPage>
     )
 }
 
