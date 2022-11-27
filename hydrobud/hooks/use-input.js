@@ -3,7 +3,6 @@ import React, {useReducer, useState, useEffect} from 'react'
 const useInput = (validateValue) => {
     const inputReducer = (state, action) => {
       const { type, value } = action
-      // console.log(value)
 
         if (type === 'INITIALIZE' || type === 'USER_INPUT') {
             const {valueIsValid, errorMessage} = validateValue(value)

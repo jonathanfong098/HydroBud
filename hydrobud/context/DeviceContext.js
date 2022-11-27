@@ -1,7 +1,9 @@
-import React, { useContext, createContext, useState, useEffect } from "react";
+import React, { useContext, createContext, useState, useEffect } from 'react'
 
-import { createDevicesListener } from "../services/firebase/devices";
-import { useAuthContext } from "./AuthContext";
+import { createDevicesListener } from '../services/firebase/devices'
+
+// importing custom context
+import { useAuthContext } from './AuthContext'
 
 const DefaultDevicesContext = {
     devices: []

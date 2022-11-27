@@ -1,5 +1,7 @@
 import Image from 'next/image'
-import DeviceCardMenu from "./DeviceCardMenu";
+
+// importing custom components
+import DeviceCardMenu from "./DeviceCardMenu"
 
 const DeviceCard = ({device}) => {
     // console.log(device.image)
@@ -18,12 +20,12 @@ const DeviceCard = ({device}) => {
                 </div>
 
                 <div className='flex flex-row min-h-fit space-x-[2rem]'>
-                    {device.image && (
+                    {device.imageURI && (
                         <div 
                             className='relative w-[10rem] h-[10rem]' 
                         >
                             <Image   
-                                src={device.image}
+                                src={device.imageURI}
                                 layout='fill'
                                 alt='device_image'
                                 className='rounded-[0.3rem]'

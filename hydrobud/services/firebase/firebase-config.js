@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app"
+import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getFirestore } from "firebase/firestore"
+import { getFirestore } from 'firebase/firestore'
 
 // const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,12 +12,12 @@ import { getFirestore } from "firebase/firestore"
 // };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBcgWqSsPtGX768mAM8Tkbr_L_WlIayWGU",
-  authDomain: "hydrobud-37132.firebaseapp.com",
-  projectId: "hydrobud-37132",
-  storageBucket: "hydrobud-37132.appspot.com",
-  messagingSenderId: "564197058070",
-  appId: "1:564197058070:web:e197064a5fd8bf72ccf737"
+  apiKey: 'AIzaSyBcgWqSsPtGX768mAM8Tkbr_L_WlIayWGU',
+  authDomain: 'hydrobud-37132.firebaseapp.com',
+  projectId: 'hydrobud-37132',
+  storageBucket: 'hydrobud-37132.appspot.com',
+  messagingSenderId: '564197058070',
+  appId: '1:564197058070:web:e197064a5fd8bf72ccf737'
 };
 
 // Initialize Firebase

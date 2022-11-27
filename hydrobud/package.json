@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.216.0",
     "@headlessui/react": "^1.7.4",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",
