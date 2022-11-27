@@ -1,4 +1,4 @@
-import { doc, collection, query, where, onSnapshot, deleteDoc} from 'firebase/firestore'
+import { doc, collection, query, where, onSnapshot, deleteDoc, setDoc } from 'firebase/firestore'
 import { firebaseDB } from './firebase-config'
 
 const getDevicesQuery = (userID) => {
@@ -28,6 +28,23 @@ const createDevicesListener = (userID, devicesCallback) => {
     return unsubscribeDevices
 }
 
+// const createDevice = async (deviceData) => {
+
+// }
+
+
+const createDevice = async (deviceData) => {
+    // console.log('createDevice')
+    const deviceDocument = doc(collection(firebaseDB, 'devices'))
+    // console.log(deviceDocument)
+    // console.log(deviceDocument._key.path.segments[1])
+
+    const deviceDataWithDeviceID = {...deviceData, id: deviceDocument._key.path.segments[1]}
+    // console.log(deviceDataWithDeviceID)
+
+    await setDoc(deviceDocument, deviceDataWithDeviceID)
+}
+
 const deleteDevice = async (deviceID) => {
     try {
         console.log('Deleting Device')
@@ -37,4 +54,4 @@ const deleteDevice = async (deviceID) => {
     }
 }
 
-export { getDevicesQuery, createDevicesListener, deleteDevice}
+export { getDevicesQuery, createDevice, createDevicesListener, deleteDevice}

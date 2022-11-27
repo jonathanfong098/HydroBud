@@ -1,4 +1,34 @@
-import { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail } from "./helper"
+import { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail } from './helper'
+
+// TODO: generalize validate function
+// export const validateValue = (value, validateCallback) => {
+//     let valueIsValid = false
+
+//     let error = validateCallback(value, valueIsValid)
+
+//     console.log(valueIsValid, error)
+
+//     return {
+//         valueIsValid: valueIsValid,
+//         errorMessage: error
+//     }
+// }
+
+// export const validateDeviceName = (value) => {
+//     const valueIsEmpty = value.trim() == ''
+//     // console.log(valueIsValid, errorMessage)
+
+//     if (valueIsEmpty) {
+//         return 'Device name cannot be empty'
+//     } else {
+//         value = true
+//         return ''
+//     }
+// }
+
+// export const test = (value) => {
+//     validateValue(value, validateDeviceName)
+// }
 
 const validateEmail = (value) => {
     let emailIsValid = false
@@ -9,7 +39,7 @@ const validateEmail = (value) => {
     if (usernameIsEmpty) {
         errorMessage = 'Email cannot be empty'
     } else if (!validEmail(value)) {
-        errorMessage = "Email is not valid"
+        errorMessage = 'Email is not valid'
     } else {
         emailIsValid = true
     }
@@ -29,7 +59,7 @@ const validateUsername = (value) => {
     if (usernameIsEmpty) {
         errorMessage = 'Username cannot be empty'
     } else if (includesWhitespace(value)) {
-        errorMessage = "Username should not include whitespace"
+        errorMessage = 'Username should not include whitespace'
     } else {
         usernameIsValid = true
     }
@@ -49,13 +79,13 @@ const validatePassword = (value) => {
     if (passwordIsEmpty) {
         errorMessage = 'Password cannot be empty'
     } else if (value.length < 8) {
-        errorMessage = "Password needs to be longer than 8 characters"
+        errorMessage = 'Password needs to be longer than 8 characters'
     } else if (!includesUppercaseLetter(value)){
-        errorMessage = "Password needs to include a uppercase letter"
+        errorMessage = 'Password needs to include a uppercase letter'
     } else if (!includesLowercaseLetter(value)) {
-        errorMessage = "Password needs to include a lowercase letter"
+        errorMessage = 'Password needs to include a lowercase letter'
     } else if (!includesSpecialCharacter(value)) {  
-        errorMessage = "Password needs to include a special character"
+        errorMessage = 'Password needs to include a special character'
     } else {
         passwordIsValid = true
     }
@@ -82,6 +112,73 @@ const validateConfirmPassword = (valueToCheck, valueToCheckAgainst) => {
     }
 }
 
-export { validatePassword, validateConfirmPassword, validateUsername, validateEmail}
+const validateDeviceName = (value) => {
+    let deviceNameIsValid = false
+    let errorMessage = ''
+
+    const usernameIsEmpty = value.trim() == ''
+
+    if (usernameIsEmpty) {
+        errorMessage = 'Device name cannot be empty'
+    } else if (value.length > 50) {
+        errorMessage = 'Device name is too long'
+    } else {
+        deviceNameIsValid = true
+    }
+
+    return {
+        valueIsValid: deviceNameIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+const validateDeviceMonitor= (value) => {
+    let monitorIsValid = false
+    let errorMessage = ''
+
+    const usernameIsEmpty = value.trim() == ''
+
+    if (usernameIsEmpty) {
+        errorMessage = 'Monitor cannot be empty'
+    } else if (value.length > 100) {
+        errorMessage = 'Device name is too long'
+    } else {
+        monitorIsValid = true
+    }
+
+    return {
+        valueIsValid: monitorIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+
+const validateDeviceDescription= (value) => {
+    let devicesDescriptionIsValid = false
+    let errorMessage = ''
+
+    if (value.length > 300) {
+        errorMessage = 'Device name is too long'
+    } else {
+        devicesDescriptionIsValid = true
+    }
+
+    // console.log(errorMessage)
+
+    return {
+        valueIsValid: devicesDescriptionIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+export { 
+    validatePassword, 
+    validateConfirmPassword, 
+    validateUsername, 
+    validateEmail,
+    validateDeviceName,
+    validateDeviceMonitor,
+    validateDeviceDescription
+}
 
  
