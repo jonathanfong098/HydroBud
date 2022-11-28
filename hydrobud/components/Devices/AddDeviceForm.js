@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { serverTimestamp } from 'firebase/firestore'
 
@@ -21,7 +21,7 @@ import useAlert from '../../hooks/use-alert'
 import { useAuthContext } from '../../context/AuthContext'
 
 
-const DeviceForm = () => {
+const AddDeviceForm = () => {
     const { currentUser, initializing } = useAuthContext()
 
     const {
@@ -87,7 +87,7 @@ const DeviceForm = () => {
         }
     }
 
-    const createDeviceHandler = async (event) => {
+    const addDeviceHandler = async (event) => {
         event.preventDefault()
     
         try {
@@ -101,9 +101,11 @@ const DeviceForm = () => {
             const metricsArray = []
             if (ppmMetricEnabled) {
                 metricsArray.push('ppm')
-            } else if (tempMetricEnabled) {
+            }  
+            if (tempMetricEnabled) {
                 metricsArray.push('temp')
-            } else if (levelMetricEnabled) {
+            } 
+            if (levelMetricEnabled) {
                 metricsArray.push('level')
             }
             
@@ -118,9 +120,9 @@ const DeviceForm = () => {
             }
             console.log('deviceData: ', deviceData)
 
-            await createDevice(deviceData)
+            const deviceID = await createDevice(deviceData)
             setAlertType('success')
-            setAlertMessage(`Created device ${name}`)
+            setAlertMessage(`Created device ${name}\n with Device ID ${deviceID}`)
         } catch (error) {
             setAlertType('error')
             setAlertMessage('Failed to create device')
@@ -141,7 +143,7 @@ const DeviceForm = () => {
             />
             <form 
                 className='flex flex-col min-w-fit items-center space-y-[4.5rem] pt-[3rem] pb-[2rem]'
-                onSubmit={createDeviceHandler}
+                onSubmit={addDeviceHandler}
             >
                 <div className='flex flex-row space-x-[5rem]'>
                     <Input 
@@ -219,15 +221,15 @@ const DeviceForm = () => {
 
 
                 <Button
+                    onClickHandler={addDeviceHandler}
                     isDisabled={!formIsValid}
-                    onClickHandler={createDeviceHandler}
+                    colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
                 >
                     Create Device
                 </Button>
             </form>
         </>
-        
     )
 }
 
-export default DeviceForm
+export default AddDeviceForm
