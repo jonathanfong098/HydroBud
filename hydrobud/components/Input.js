@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const Input = ({children, isTextArea, id, name, label, value, onChangeHandler, valueInputIsInvalid, valueError}) => {
+const Input = ({children, isTextArea, inputType, id, name, label, value, onChangeHandler, valueInputIsInvalid, valueError}) => {
     return (
         <div className='flex flex-col'>
             <label 
@@ -26,7 +26,7 @@ const Input = ({children, isTextArea, id, name, label, value, onChangeHandler, v
                     (
                         <input
                             name={name}
-                            type='text'
+                            type={inputType}
                             className='w-full h-full mx-[1rem] bg-transparent text-[1.5rem] focus:outline-none'
                             value={value}
                             onChange={onChangeHandler}

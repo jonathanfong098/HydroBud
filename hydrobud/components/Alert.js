@@ -40,7 +40,7 @@ const Alert = ({
                   leaveFrom='opacity-100 scale-100'
                   leaveTo='opacity-0 scale-95'
                 >
-                  <Dialog.Panel className={`flex flex-col justify-center items-center ${isAlert ? 'w-[20rem] h-[8rem]': ''} ${isConfirm ? 'w-[18rem] h-[10rem]': ''} rounded-[1rem] bg-white`}>
+                  <Dialog.Panel className={`flex flex-col justify-center items-center ${isAlert ? 'w-[20rem] h-[10rem]': ''} ${isConfirm ? 'w-[18rem] h-[10rem]': ''} rounded-[1rem] bg-white`}>
                     {isAlert && (
                       <>
                         <Dialog.Title 

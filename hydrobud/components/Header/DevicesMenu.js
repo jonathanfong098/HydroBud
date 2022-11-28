@@ -1,6 +1,5 @@
 import { Fragment } from 'react'
 import { Menu, Transition} from '@headlessui/react'
-import Image from 'next/image'
 
 // importing custom components
 import LogoMenuItem from '../LogoMenuItem'
@@ -21,7 +20,7 @@ const DevicesMenu = ({label}) => {
                     leaveFrom='transform opacity-100 scale-100'
                     leaveTo='transform opacity-0 scale-95'
                 >
-                    <Menu.Items className='flex flex-col absolute inset-x-0 top-[2.5rem] w-full divide-y divide-gray-100 rounded-[1rem] bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                    <Menu.Items className='flex flex-col absolute top-[2.5rem] w-full divide-y divide-gray-100 rounded-[1rem] bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                         <LogoMenuItem
                             label='View Data'
                             src='/images/view_data.svg'

@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 // importing custom components
 import DeviceCardMenu from "./DeviceCardMenu"
 
@@ -8,12 +6,12 @@ const DeviceCard = ({device}) => {
 
     return (
         <div className='flex flex-col justify-center items-center w-[38rem] min-h-fit pt-[3rem] pb-[4rem] rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE]'>
-            <div className='flex flex-col justify-center relative w-[32rem] space-y-[1rem]'>
+            <div className='flex flex-col justify-center w-[32rem] space-y-[1rem]'>
                 <div className='flex flex-row items-center w-full h-fit space-x-[1rem]'>
                     <h1 className='text-4xl text-[#9CBA96] font-bold'>
                         {device.name}
                     </h1>
-                    <div className='font-medium'>{`#${device.id}`}</div>
+                    <h2 className='font-medium'>{`#${device.id}`}</h2>
                     <div className='flex flex-row w-full justify-end'>
                         <DeviceCardMenu device={device}/>
                     </div>
@@ -21,16 +19,12 @@ const DeviceCard = ({device}) => {
 
                 <div className='flex flex-row min-h-fit space-x-[2rem]'>
                     {device.imageURI && (
-                        <div 
-                            className='relative w-[10rem] h-[10rem]' 
+                        <img 
+                            className='w-[10rem] h-[10rem] rounded-[0.3rem]'
+                            src={device.imageURI}
+                            alt='device_image'
                         >
-                            <Image   
-                                src={device.imageURI}
-                                layout='fill'
-                                alt='device_image'
-                                className='rounded-[0.3rem]'
-                            />
-                        </div>
+                        </img>
                     )}
                     <div className={`flex flex-col ${device.image === '' ? 'w-full': 'w-2/3'} h-full`}>
                         <p className='text-lg font-normal'>{`Monitoring: ${device.monitor}`}</p>
