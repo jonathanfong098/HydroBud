@@ -1,15 +1,27 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 // importing custom components
 import Alert from '../../components/Alert'
+import Button from '../../components/Button'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'
 
+// importing custom context
+import { useAuthContext } from '../../context/AuthContext'
+
 import { resetPassword, errorMessage } from '../../services/firebase/firebase-auth'
 
 const ForgotPassword = () => {
+    const router = useRouter()
+
+    const { currentUser, initializing } = useAuthContext()
+    if (!initializing && currentUser) {
+        router.push('/dashboard')
+    }
+    
     const [email, setEmail] = useState('')
     const emailChangeHandler = (event) => {
         setEmail(event.target.value)
@@ -57,12 +69,18 @@ const ForgotPassword = () => {
                     </div>
 
                     <div className='flex justify-center'>
-                        <button 
+                        <Button
+                            onClickHandler={resetPasswordHandler}
+                            colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
+                        >
+                            Reset Password
+                        </Button>
+                        {/* <button 
                             className='h-[4.5rem] w-[17rem] bg-[#B6CB9E] font-semibold text-white text-3xl rounded-[2rem] hover:bg-[#BAC0D0]'
                             onClick={resetPasswordHandler}
                         >
                             Reset Password
-                        </button>
+                        </button> */}
                     </div>
 
                     <div className='flex justify-center'>

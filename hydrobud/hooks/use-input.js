@@ -34,6 +34,12 @@ const useInput = (validateValue) => {
       }
     }
 
+    const untouchValueInput = () => {
+      if (valueInputTouched){
+        setValueInputTouched(false)
+      }
+    }
+
     const [valueInputIsInvalid, setValueInputIsInvalid] = useState(false)
     useEffect(() => {
       const result = !inputState.valueIsValid && valueInputTouched
@@ -45,6 +51,7 @@ const useInput = (validateValue) => {
       dispatchInput: dispatchInput,
       valueInputTouched: valueInputTouched,
       touchValueInput: touchValueInput,
+      untouchValueInput: untouchValueInput,
       valueInputIsInvalid: valueInputIsInvalid
     }
 }

@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { Fragment } from 'react'
 import { Menu, Transition} from '@headlessui/react'
 import Image from 'next/image'
@@ -8,12 +9,22 @@ import { deleteDevice as deleteDeviceRequest} from '../../services/firebase/devi
 // import ForwardPropsLink from '../ForwardPropsLink'
 import Alert from '../Alert'
 import LogoMenuItem from '../LogoMenuItem'
+import AddData from './AddData'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'
 
 const DeviceCardMenu = ({device}) => {
     const { alertIsOpen, openAlert, closeAlert } = useAlert()
+    // const {
+    //     alertIsOpen: addDataAlertIsOpen, 
+    //     openAlert: open, 
+    //     closeAlert: closeAddDataAlert, 
+    //     alertMessage: addDataAlertMessage, 
+    //     setAlertMessage: setAddDataAlertMessage
+    // } = useAlert()
+    // const [alertType, setAlertType] = useState('')  
+    const { alertIsOpen: modalOpen, openAlert: openModal, closeAlert: closeModal} = useAlert()
 
     const confirmHandler = (deviceID) => {
         deleteDeviceRequest(deviceID)
@@ -40,6 +51,23 @@ const DeviceCardMenu = ({device}) => {
                 confirmData={{
                     deviceID: device.id
                 }}
+            />
+              {/* <Alert 
+                isOpen={addDataAlertIsOpen} 
+                closeModal={closeAddDataAlert} 
+                isAlert={true} 
+                alertType={alertType} 
+                modalTitle={alertType} 
+                alertMessage={addDataAlertMessage}
+            /> */}
+            <AddData 
+                isOpen={modalOpen} 
+                closeModal={closeModal}
+                deviceID={device.id}
+                deviceMetrics={device.metrics}
+                // openAddDataAlert={open}
+                // setAlertType={setAlertType}
+                // setAddDataAlertMessage={setAddDataAlertMessage}
             />
             <Menu>
                 <Menu.Button className='relative w-[2rem] h-[2rem]'>
@@ -98,7 +126,7 @@ const DeviceCardMenu = ({device}) => {
                                         alt='trash'
                                     />
                                 </div>
-                                <button onClick={() => {openAlert()}}>Add Data</button>
+                                <button onClick={() => {openModal()}}>Add Data</button>
                             </div>
                         </Menu.Item>
                     </Menu.Items>

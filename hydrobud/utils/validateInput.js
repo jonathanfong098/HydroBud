@@ -171,6 +171,44 @@ const validateDeviceDescription= (value) => {
     }
 }
 
+const validatePpm= (value) => {
+    let ppmIsValid = false
+    let errorMessage = ''
+
+    const usernameIsEmpty = value.trim() == ''
+
+    if (usernameIsEmpty) {
+        errorMessage = 'PPM cannot be empty'
+    } else {
+        ppmIsValid = true
+    }
+
+    return {
+        valueIsValid: ppmIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+const validateTemperature= (value) => {
+    let ppmIsValid = false
+    let errorMessage = ''
+
+    const usernameIsEmpty = value.trim() == ''
+
+    if (usernameIsEmpty) {
+        errorMessage = 'Temperature cannot be empty'
+    } else {
+        ppmIsValid = true
+    }
+
+    return {
+        valueIsValid: ppmIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+
+
 export { 
     validatePassword, 
     validateConfirmPassword, 
@@ -178,7 +216,9 @@ export {
     validateEmail,
     validateDeviceName,
     validateDeviceMonitor,
-    validateDeviceDescription
+    validateDeviceDescription,
+    validatePpm,
+    validateTemperature
 }
 
  

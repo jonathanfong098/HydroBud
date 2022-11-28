@@ -12,6 +12,11 @@ const getDeviceQuery = (deviceID) => {
     return q
 } 
 
+const getDeviceDataQuery = (deviceID) => {
+    const q = query(collection(firebaseDB, 'device_data'), where('deviceID', '==', deviceID), orderBy('timestamp', 'desc'))
+    return q
+}
+
 const createDevicesListener = (userID, devicesCallback) => {
     const unsubscribeDevices = onSnapshot(getDevicesQuery(userID), (snapshot) => {
         // snapshot.docs.map(doc => console.log(doc.data()))
@@ -41,6 +46,29 @@ const createDeviceListener = (deviceID, deviceCallback) => {
     })
 
     return unsubscribeDevice
+}
+
+const createDeviceDataListener = (deviceID, deviceDataCallback) => {
+    const unsubscribeDevices = onSnapshot(getDeviceDataQuery(deviceID), (snapshot) => {
+        // snapshot.docs.map(doc => console.log(doc.data()))
+        const deviceData = snapshot.docs.map(doc => doc.data())
+        console.log(deviceData)
+        deviceDataCallback(deviceData)
+
+        // snapshot.docChanges().forEach((change) => {
+        //     if (change.type === 'added') {
+        //         console.log('New device: ', change.doc.data())
+        //     }
+        //     if (change.type === 'modified')s {
+        //         console.log('Modified device: ', change.doc.data())
+        //     }
+        //     if (change.type === 'removed') {
+        //         console.log('Removed device: ', change.doc.data())
+        //     }
+        //   })
+    })
+
+    return unsubscribeDevices
 }
 
 const createDevice = async (deviceData) => {
@@ -81,4 +109,27 @@ const deleteDevice = async (deviceID) => {
     }
 }
 
-export { getDevicesQuery, getDeviceQuery, createDevice, updateDevice, createDeviceListener, createDevicesListener, deleteDevice}
+const addDataToDevice = async (deviceID, data) => {
+    const dataDocument = doc(collection(firebaseDB, 'device_data'))
+    console.log(dataDocument)
+    console.log(dataDocument._key.path.segments[1])
+
+    const dataWithDeviceID = {...data, deviceID: deviceID}
+
+    await setDoc(dataDocument, dataWithDeviceID)
+
+    return dataDocument._key.path.segments[1]
+}
+
+export { 
+    getDevicesQuery, 
+    getDeviceQuery,
+    getDeviceDataQuery, 
+    createDevice, 
+    updateDevice, 
+    deleteDevice,
+    addDataToDevice,
+    createDeviceListener, 
+    createDevicesListener, 
+    createDeviceDataListener
+}
