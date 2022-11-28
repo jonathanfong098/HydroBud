@@ -5,7 +5,7 @@ const Input = ({children, isTextArea, id, name, label, value, onChangeHandler, v
     return (
         <div className='flex flex-col'>
             <label 
-                htmlFor='monitor' 
+                htmlFor={name} 
                 className='text-[2rem] font-semibold'
             >
                 {label}:

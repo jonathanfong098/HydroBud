@@ -2,18 +2,18 @@ import React from 'react'
 
 // importing custom components
 import HeaderPage from '../../components/Layout/HeaderPage'
-import DeviceForm from '../../components/Devices/DeviceForm'
+import AddDeviceForm from '../../components/Devices/AddDeviceForm'
 
 const CreateDevice = () => {
     return (
         <HeaderPage>
             <div className='flex justify-center'>
-                <DeviceForm/>
+                <AddDeviceForm/>
             </div>
         </HeaderPage>
     )
 }
 
-// CreateDevice.requireAuth = true
+CreateDevice.requireAuth = true
 
 export default CreateDevice

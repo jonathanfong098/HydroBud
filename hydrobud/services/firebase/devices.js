@@ -1,8 +1,14 @@
-import { doc, collection, query, where, onSnapshot, deleteDoc, setDoc } from 'firebase/firestore'
+import { doc, collection, query, where, orderBy, onSnapshot, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDB } from './firebase-config'
 
 const getDevicesQuery = (userID) => {
-    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID))
+    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID), orderBy('timestamp', 'desc'))
+    // const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID))
+    return q
+} 
+
+const getDeviceQuery = (deviceID) => {
+    const q = query(doc(firebaseDB, 'devices', deviceID))
     return q
 } 
 
@@ -28,10 +34,14 @@ const createDevicesListener = (userID, devicesCallback) => {
     return unsubscribeDevices
 }
 
-// const createDevice = async (deviceData) => {
+const createDeviceListener = (deviceID, deviceCallback) => {
+    const unsubscribeDevice = onSnapshot(getDeviceQuery(deviceID), (doc) => {
+        console.log("Current data: ", doc.data())
+        deviceCallback(doc.data())
+    })
 
-// }
-
+    return unsubscribeDevice
+}
 
 const createDevice = async (deviceData) => {
     // console.log('createDevice')
@@ -43,6 +53,23 @@ const createDevice = async (deviceData) => {
     // console.log(deviceDataWithDeviceID)
 
     await setDoc(deviceDocument, deviceDataWithDeviceID)
+
+    return deviceDocument._key.path.segments[1]
+}
+
+const updateDevice = async (deviceID, deviceData) => {
+    console.log('updateDevice')
+    const deviceDocument = doc(firebaseDB, 'devices', deviceID)
+    console.log(deviceDocument)
+    // console.log(deviceDataWithDeviceID)
+
+    await updateDoc(deviceDocument, {
+        name: deviceData.name,
+        monitor: deviceData.monitor,
+        description: deviceData.description,
+        imageURI: deviceData.imageURI,
+        metrics: deviceData.metrics
+    })
 }
 
 const deleteDevice = async (deviceID) => {
@@ -54,4 +81,4 @@ const deleteDevice = async (deviceID) => {
     }
 }
 
-export { getDevicesQuery, createDevice, createDevicesListener, deleteDevice}
+export { getDevicesQuery, getDeviceQuery, createDevice, updateDevice, createDeviceListener, createDevicesListener, deleteDevice}

@@ -120,7 +120,12 @@ const Login = () => {
                     </div>
 
                     <div className='flex justify-center'>
-                        <Button onClickHandler={loginHandler}>Login</Button>
+                        <Button 
+                            onClickHandler={loginHandler}
+                            colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
+                        >
+                            Login
+                        </Button>
                     </div>
 
                     <div className='flex flex-row space-x-[0.5rem] justify-center'>

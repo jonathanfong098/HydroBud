@@ -181,6 +181,7 @@ const Signup = () => {
                         <Button 
                             onClickHandler={signupHandler}
                             isDisabled={!formIsValid}
+                            colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
                         >
                             Sign Up
                         </Button>

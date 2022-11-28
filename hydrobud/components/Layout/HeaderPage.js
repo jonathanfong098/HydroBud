@@ -1,7 +1,7 @@
 import React from 'react'
 
 // importing custom components
-import Header from '../Header'
+import Header from '../Header/Header'
 
 const HeaderPage = ({children}) => {
     return (
