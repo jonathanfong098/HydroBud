@@ -17,7 +17,7 @@ const DeviceDataCard = ({device}) => {
     if (deviceData.length > 0) {
         console.log('deviceData:', deviceData[0])
         return (
-            <div className={`flex flex-col justify-center items-center ${deviceData.length > 0 ? 'min-w-fit': 'min-w-[34rem]'} min-h-fit rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE]`}>
+            <div className={`flex flex-col justify-center items-center ${deviceData.length > 0 ? 'min-w-fit': 'min-w-[34rem]'} min-h-fit rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md`}>
                 <div className={`flex flex-col justify-center w-full ${deviceData.length > 0 ? 'pt-[4.3rem]': 'py-[3rem]'}  px-[3rem] space-y-[1rem]`}>
                     <div className='flex flex-row items-center w-full h-fit space-x-[1rem]'>
                         <h1 className='text-4xl text-[#9CBA96] font-bold'>

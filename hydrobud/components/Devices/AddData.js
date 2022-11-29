@@ -87,8 +87,8 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
         } finally {
             closeModal()
 
-            setPPM('')
-            setTemperature('')
+            dispatchPpm({type:'INITIALIZE', value: ''})
+            dispatchTemperature({type:'INITIALIZE', value: ''})
             setIsLevel(true)
             
             // openAddDataAlert()
@@ -101,6 +101,8 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
         formIsValid = ppmIsValid
     } else if (deviceMetrics.includes('temp')) {
         formIsValid = temperatureIsValid
+    } else if (deviceMetrics.includes('level')){
+        formIsValid = true
     } else {
         formIsValid = ppmIsValid && temperatureIsValid
     }
@@ -167,7 +169,7 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
                                     />
                                 ) : (<></>)}
                                
-                                {deviceMetrics.includes('temp') ? (
+                                {deviceMetrics.includes('level') ? (
                                     <div className='py-[1rem]'>
                                         <Toggle 
                                             label={'Level:'}
