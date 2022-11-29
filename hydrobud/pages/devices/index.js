@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 // importing custom components
-import HeaderPage from '../../components/layout/HeaderPage'
+import HeaderPage from '../../components/Layout/HeaderPage'
 import DeviceCardList from '../../components/Devices/DeviceCardList'
 
 // importing custom context
