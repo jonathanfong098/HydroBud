@@ -25,12 +25,12 @@ for i in range(5):
         toUpload = {
             u'ppm': int(data[0]),
             u'temp': float(data[1]),
-            u'level': data[2][0],
+            u'level': bool(data[2][0]),
             u'deviceID': u'5rvgs9BisKUvNPkarzez',
             u'timestamp': firestore.SERVER_TIMESTAMP
             }
         print("ppm",int(data[0]))
         print("temp",float(data[1]))
-        print("level",data[2][0])
+        print("level",bool(data[2][0]))
         db.collection(u'device_data').document().set(toUpload)
 ser.close()
