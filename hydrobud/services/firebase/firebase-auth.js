@@ -7,7 +7,8 @@ const signup = async (email, username, password) => {
     await createUserWithEmailAndPassword(firebaseAuth, email, password)
     await setDoc(doc(firebaseDB, 'users', firebaseAuth.currentUser.uid), {
       email: email,
-      username: username
+      username: username,
+      imageURI: 'https://hydrobud-media.s3.us-west-2.amazonaws.com/default_profile_picture.jpg'
     })
   } catch (error) {
     throw error

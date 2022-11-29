@@ -4,8 +4,8 @@ const params = {
     Bucket: 'hydrobud-media',
 }
 
-const ACCESS_KEY = process.env.ACCESS_KEY
-const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY
+const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY
+const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY
 
 // console.log(process.env.REACT_AWS_ACCESS_KEY)
 // console.log(process.env.REACT_AWS_SECRET_KEY)
@@ -13,8 +13,8 @@ const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY
 const getS3Client = async () => {
     const client = new S3({
       credentials: {
-        accessKeyId: ACCESS_KEY,
-        secretAccessKey: SECRET_ACCESS_KEY
+        accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY,
+        secretAccessKey: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY
       },
       region: 'us-west-2',
     })
