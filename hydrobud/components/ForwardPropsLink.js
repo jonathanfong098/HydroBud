@@ -18,4 +18,6 @@ const ForwardPropsLink = forwardRef((props, ref) => {
   )
 })
 
+ForwardPropsLink.displayName = 'ForwardPropsLink'
+
 export default ForwardPropsLink
