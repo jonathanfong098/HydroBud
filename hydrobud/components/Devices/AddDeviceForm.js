@@ -5,6 +5,7 @@ import { serverTimestamp } from 'firebase/firestore'
 import { validateDeviceName, validateDeviceMonitor, validateDeviceDescription} from '../../utils/validateInput'
 import { createDevice } from '../../services/firebase/devices'
 import { uploadImageToHydrobudMedia } from '../../services/s3'
+import { objectIsEmpty } from '../../utils/helper'
 
 // importing custom components 
 import Input from '../Input'
@@ -92,10 +93,12 @@ const AddDeviceForm = () => {
     
         try {
             let imageURI = null;
-        
-            const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
-            if (imageData) {
-                imageURI = imageData.uri
+
+            if (!objectIsEmpty(selectedImage)) {
+                const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
+                if (imageData) {
+                    imageURI = imageData.uri
+                }
             }
 
             const metricsArray = []
@@ -124,6 +127,7 @@ const AddDeviceForm = () => {
             setAlertType('success')
             setAlertMessage(`Created device ${name}\n with Device ID ${deviceID}`)
         } catch (error) {
+            console.log(error)
             setAlertType('error')
             setAlertMessage('Failed to create device')
         } finally {

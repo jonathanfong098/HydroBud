@@ -4,8 +4,16 @@ import Image from 'next/image'
 
 // importing custom components
 import LogoMenuItem from '../LogoMenuItem'
+import EditProfile from '../Profile/EditProfile'
+
+import useAlert from '../../hooks/use-alert'
 
 const DevicesMenu = ({label}) => {
+    const editProfileHandler = () => {
+        openModal()
+    }
+
+    const { alertIsOpen: modalOpen, openAlert: openModal, closeAlert: closeModal} = useAlert()
     return (
         <>
             <Menu>
@@ -31,12 +39,13 @@ const DevicesMenu = ({label}) => {
                                         alt='edit_profile'
                                     />
                                 </div>
-                                <button onClick={() => {openAlert()}}>Edit Profile</button>
+                                <button onClick={editProfileHandler}>Edit Profile</button>
                             </div>
                         </Menu.Item>
                     </Menu.Items>
                 </Transition>
             </Menu>
+            <EditProfile isOpen={modalOpen} closeModal={closeModal}/>
         </>
     )
 }
