@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { serverTimestamp } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 
-import { addDataToDevice } from '../../services/firebase/devices'
+import { addDataToDevice, createDeviceDataListener } from '../../services/firebase/devices'
 import { validatePpm, validateTemperature } from '../../utils/validateInput'
 
 // importing custom components
@@ -23,6 +23,11 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     const router = useRouter()
 
     const [isLevel, setIsLevel] = useState(true)
+    const [currentDeviceData, setDeviceData] = useState([])
+
+    useEffect(() => {
+        const unsubscribeDeviceData = createDeviceDataListener(deviceID, setDeviceData)
+    }, [])
 
     const {
         inputState: ppmState, 
@@ -65,17 +70,22 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     }
 
     const addDataHandler = async (event) => {
+
         event.preventDefault()
 
-        let ppmToAdd = null
-        let tempToAdd = null
-        let levelToAdd = null
+        console.log('currentDeviceData', currentDeviceData)
+
+        let ppmToAdd = currentDeviceData.ppm ? currentDeviceData.ppm : null
+        let tempToAdd = currentDeviceData.temp ? currentDeviceData.temp : null
+        let levelToAdd = currentDeviceData.level ? currentDeviceData.level : null
 
         if(deviceMetrics.includes('ppm')){
             ppmToAdd = parseInt(ppm)
-        } else if (deviceMetrics.includes('temp')) {
+        } 
+        if (deviceMetrics.includes('temp')) {
             tempToAdd = parseInt(temperature)
-        } else if (deviceMetrics.includes('level')){
+        }
+        if (deviceMetrics.includes('level')){
             levelToAdd = isLevel
         }
 
@@ -107,6 +117,8 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             // openAddDataAlert()
             openAlert()
         }
+
+        // unsubscribeDeviceData()
     }
 
     let formIsValid;
