@@ -31,7 +31,7 @@ const DevicesMenu = ({label}) => {
                                         alt='edit_profile'
                                     />
                                 </div>
-                                <button onClick={() => {openAlert()}}>Edit Profile</button>
+                                <button>Edit Profile</button>
                             </div>
                         </Menu.Item>
                     </Menu.Items>
