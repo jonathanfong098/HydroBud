@@ -4,8 +4,9 @@ const params = {
     Bucket: 'hydrobud-media',
 }
 
-const ACCESS_KEY = process.env.AWS_ACCESS_KEY
-const SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY
+const ACCESS_KEY = process.env.ACCESS_KEY
+const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY
+
 // console.log(process.env.REACT_AWS_ACCESS_KEY)
 // console.log(process.env.REACT_AWS_SECRET_KEY)
 

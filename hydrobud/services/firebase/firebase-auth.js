@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
-import { collection, addDoc, doc, setDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, setDoc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { firebaseAuth, firebaseDB } from './firebase-config'
 
 const signup = async (email, username, password) => {
@@ -14,8 +14,47 @@ const signup = async (email, username, password) => {
   }
 }
 
+
 const login = async (email, password) => {
-    return signInWithEmailAndPassword(firebaseAuth, email, password)
+    try {
+      await signInWithEmailAndPassword(firebaseAuth, email, password)
+    } catch (error) {
+      throw error
+    }
+}
+
+const getUser = async (userID) => {
+  console.log('userID', userID)
+  const docRef = doc(firebaseDB, 'users', userID)
+
+  const currentUser = await getDoc(docRef)
+
+  if (currentUser) {
+    console.log('user data', currentUser.data())
+    return currentUser.data()
+  } else {
+    throw new Error('user does not exist ')
+  }
+}
+
+const creteUserListener = (userID, userCallback) => {
+    const unsubscribeUser = onSnapshot(doc(firebaseDB, 'users', userID), (doc) => {
+      console.log("Current data: ", doc.data());
+      userCallback(doc.data())
+  });
+
+  return unsubscribeUser
+}
+
+const updateUser = async (userID, userData) => {
+  const docRef = doc(firebaseDB, 'users', userID)
+
+  console.log('userData: firebase-auth', userData)
+
+  await updateDoc(docRef, {
+    username: userData.username,
+    imageURI: userData.imageURI
+  })
 }
 
 const logout = () => {
@@ -41,4 +80,4 @@ const errorMessage = (error) => {
   }
 }
 
-export { signup, login, logout, resetPassword, errorMessage }
+export { signup, login, logout, resetPassword, getUser, creteUserListener, updateUser, errorMessage}

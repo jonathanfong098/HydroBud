@@ -22,8 +22,11 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(firebaseAuth, user => {
           setCurrentUser(user)
+          console.log(user)
           setInitializing(false)
         })
+
+        
     
         return unsubscribe
       }, [])

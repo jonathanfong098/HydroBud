@@ -15,7 +15,8 @@ const DeviceDataCard = ({device}) => {
     }, [])
     
     if (deviceData.length > 0) {
-        console.log('deviceData:', deviceData[0])
+        console.log('deviceData:', deviceData[0].ppm)
+        console.log('result:', deviceData[0].ppm == Number.NaN)
         return (
             <div className={`flex flex-col justify-center items-center ${deviceData.length > 0 ? 'min-w-fit': 'min-w-[34rem]'} min-h-fit rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md`}>
                 <div className={`flex flex-col justify-center w-full ${deviceData.length > 0 ? 'pt-[4.3rem]': 'py-[3rem]'}  px-[3rem] space-y-[1rem]`}>
@@ -32,7 +33,8 @@ const DeviceDataCard = ({device}) => {
                     <h2 className='text-lg font-normal'>{`#Monitoring: ${device.monitor}`}</h2>
                     
                     <div className='flex flex-row justify-center w-full pt-[1rem] space-x-[3rem]'>
-                        <ReactSpeedometer
+                        {deviceData[0].level && (
+                            <ReactSpeedometer
                                 width={250}
                                 height={250} 
                                 minValue={0} 
@@ -47,9 +49,10 @@ const DeviceDataCard = ({device}) => {
                                 ]}
                                 needleColor="#000080"
                                 currentValueText='Water Level: ${value}'
-                        />
+                            />
+                        )}
                         
-                        {deviceData[0].ppm != Number.NaN ? (
+                        {deviceData[0].ppm ? (
                             <ReactSpeedometer
                                 width={250}
                                 height={250} 
@@ -68,7 +71,7 @@ const DeviceDataCard = ({device}) => {
                             />
                         ):(<></>)}
 
-                         {deviceData[0].temp != Number.NaN ? (
+                         {deviceData[0].temp ? (
                               <ReactSpeedometer
                               width={250}
                               height={250} 

@@ -67,13 +67,25 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     const addDataHandler = async (event) => {
         event.preventDefault()
 
+        let ppmToAdd = null
+        let tempToAdd = null
+        let levelToAdd = null
+
+        if(deviceMetrics.includes('ppm')){
+            ppmToAdd = parseInt(ppm)
+        } else if (deviceMetrics.includes('temp')) {
+            tempToAdd = parseInt(temperature)
+        } else if (deviceMetrics.includes('level')){
+            levelToAdd = isLevel
+        }
+
         const deviceData = {
-            ppm: parseInt(ppm),
-            temp: parseInt(temperature),
-            level: isLevel,
+            ppm: ppmToAdd,
+            temp: tempToAdd,
+            level: levelToAdd,
             timestamp: serverTimestamp()
         }
-        console.log(deviceData)
+        console.log('deviceData to submit: ', deviceData)
 
         try {
             await addDataToDevice(deviceID, deviceData)
@@ -81,6 +93,7 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             setAlertMessage(`Added data`)
             // setAddDataAlertMessage(`Added data`)
         } catch (error) {
+            throw error
             setAlertType('error')
             setAlertMessage('Failed to add data')
             // setAddDataAlertMessage('Failed to add data')
@@ -110,14 +123,14 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     // console.log('device: ', deviceMetrics)
     return (
         <>
-             <Alert 
+             {/* <Alert 
                 isOpen={alertIsOpen} 
                 closeModal={closeAddDataModal} 
                 isAlert={true} 
                 alertType={alertType} 
                 modalTitle={alertType} 
                 alertMessage={alertMessage}
-            />
+            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeAddDataModal}>
                 <Transition.Child
@@ -160,7 +173,7 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
 
                                 {deviceMetrics.includes('temp') ? (
                                     <Input 
-                                        label='Temperature (C)'
+                                        label='Temperature (F)'
                                         inputType='number'
                                         value={temperature}
                                         onChangeHandler={temperatureChangeHandler}

@@ -18,4 +18,8 @@ const validEmail = (value) => {
     return Boolean(value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
 }
 
-export { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail }
+const objectIsEmpty = (object) => {
+    return (Object.keys(object).length === 0 && object.constructor === Object)
+}
+
+export { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail, objectIsEmpty }
