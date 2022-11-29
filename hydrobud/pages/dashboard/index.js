@@ -1,7 +1,7 @@
 import React from 'react'
 
 // importing custom component
-import HeaderPage from '../../components/layout/HeaderPage'
+import HeaderPage from '../../components/Layout/HeaderPage'
 import DeviceDataCardList from '../../components/Data/DeviceDataCardList'
 
 // importing custom context
