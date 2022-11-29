@@ -5,8 +5,8 @@ const DeviceCard = ({device}) => {
     // console.log(device.image)
 
     return (
-        <div className='flex flex-col justify-center items-center w-[38rem] min-h-fit pt-[3rem] pb-[4rem] rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE]'>
-            <div className='flex flex-col justify-center w-[32rem] space-y-[1rem]'>
+        <div className='flex flex-col justify-center items-center w-full min-h-fit pt-[3rem] pb-[4rem] rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md'>
+            <div className='flex flex-col justify-center w-5/6 space-y-[1rem]'>
                 <div className='flex flex-row items-center w-full h-fit space-x-[1rem]'>
                     <h1 className='text-4xl text-[#9CBA96] font-bold'>
                         {device.name}

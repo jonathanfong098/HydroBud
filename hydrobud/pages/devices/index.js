@@ -56,7 +56,10 @@ const Devices = () => {
 
     return (
         <HeaderPage>
-            <DeviceCardList devices={deviceContext.devices}/>
+            <div className='flex justify-center'>
+                <DeviceCardList devices={deviceContext.devices}/>
+            </div>
+           
             {/* <DeviceCardList devices={devices}/> */}
             {/* {deviceContext.devices.length > 0 && <div className='w-full h-[1rem] bg-[#F0F0F0]'/>} */}
         </HeaderPage>

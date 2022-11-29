@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -49,7 +50,15 @@ const ForgotPassword = () => {
     return(
         <div className='flex flex-row h-screen w-screen'>
             <Alert isOpen={alertIsOpen} closeModal={closeAlert} isError={isError} title={isError ? 'Error' : 'Success'} message={alertMessage}/>
-            <div className='w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'></div>
+            <div className='flex justify-center items-center w-2/5 h-full bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'>
+                <div className='relative w-[28rem] h-[20rem]'>
+                    <Image
+                        src='/images/hydrobud_logo.png'
+                        layout='fill'
+                        alt='hydrobud_log'
+                    />
+                </div>
+            </div>
             <div className='flex w-3/5 justify-center'>
                 <form 
                     className='flex flex-col w-2/5 h-full justify-center space-y-[4rem]'

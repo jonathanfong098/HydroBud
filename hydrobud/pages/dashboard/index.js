@@ -13,7 +13,10 @@ const Dashboard = () => {
     
     return (
         <HeaderPage>
-            <DeviceDataCardList devices={deviceContext.devices}/>
+            <div className='flex justify-center'>
+                <DeviceDataCardList devices={deviceContext.devices}/>
+            </div>
+
         </HeaderPage>
     )
 }

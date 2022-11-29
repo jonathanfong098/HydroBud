@@ -25,7 +25,7 @@ const Header = ({children}) => {
     }
 
     return (
-        <div className='flex flex-row justify-center items-center w-screen min-h-[6rem] max-h-[10rem] bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'>
+        <div className=' flex flex-row static justify-center items-center w-screen min-h-[6rem] max-h-[10rem] bg-gradient-to-br from-[#92B4A7] to-[#A9D978]'>
             <div className='flex flex-row w-full max-w-[115rem]'>
                 <div className='flex justify-center items-center w-1/3'>
                     <Link href='/' className='text-[#FFFFFF] text-[3rem] font-bold'>Hydrobud</Link>
