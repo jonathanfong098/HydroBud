@@ -70,11 +70,12 @@ const DeviceCardMenu = ({device}) => {
                 // setAddDataAlertMessage={setAddDataAlertMessage}
             />
             <Menu>
-                <Menu.Button className='relative w-[2rem] h-[2rem]'>
-                    <Image   
+                <Menu.Button>
+                    <img   
                         src='/images/horizontal_dots.svg'
                         layout='fill'
-                        alt='eye'
+                        alt='open_menu'
+                        className='w-[2rem] h-[2rem]'
                     />
                 </Menu.Button>
                 <Transition
