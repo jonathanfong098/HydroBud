@@ -9,7 +9,6 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { useAuthContext } from '../../context/AuthContext'
 
 const DeviceCardList = ({devices}) => {
-    const [inputText, setInputText] = useState("");
     const {currentUser} = useAuthContext()
     // let inputHandler = (event) => {
     //   //convert input text to lower case
@@ -78,7 +77,7 @@ const DeviceCardList = ({devices}) => {
       console.log(currentUser)
 
     return (
-        <div className='flex flex-col w-[38rem] h-full items-center space-y-[3rem] pt-[4rem] pb-[2rem] bg-[#F0F0F0]'>
+        <div className='flex flex-col w-[41rem] h-full items-center space-y-[3rem] pt-[4rem] pb-[2rem] bg-[#F0F0F0]'>
                      {/* <SearchBar devices={devices}/> */}
                 <div className='text-[3rem] font-semibold'>Your Devices</div>
                 <div className='w-full'>
@@ -91,6 +90,7 @@ const DeviceCardList = ({devices}) => {
                         autoFocus
                         formatResult={formatResult}
                         style={searchBarStyle}
+                        placeholder='Device Name or ID'
                     />
                 </div>
             

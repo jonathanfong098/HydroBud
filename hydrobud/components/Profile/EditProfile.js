@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import { addDataToDevice } from '../../services/firebase/devices'
 import { validatePpm, validateTemperature } from '../../utils/validateInput'
-import { validateUsername } from '../../utils/validateInput'
+import { validateUsername, validateBio } from '../../utils/validateInput'
 import { getUser, creteUserListener, updateUser} from '../../services/firebase/firebase-auth'
 import { uploadImageToHydrobudMedia } from '../../services/s3'
 import { objectIsEmpty } from '../../utils/helper'
@@ -14,7 +14,6 @@ import { objectIsEmpty } from '../../utils/helper'
 // importing custom components
 import Button from '../Button'
 import Input from '../Input'
-import Toggle from '../Toggle'
 import Alert from '../Alert'
 
 // importing custom context 
@@ -25,7 +24,7 @@ import useAlert from '../../hooks/use-alert'
 import useInput from '../../hooks/use-input'
 
 const EditProfile = ({isOpen, closeModal}) => {
-    const { currentUser } = useAuthContext()
+    const { currentUser, currentUserData} = useAuthContext()
 
     const {
         inputState: usernameState, 
@@ -37,6 +36,18 @@ const EditProfile = ({isOpen, closeModal}) => {
     const usernameChangeHandler = (event) => {
         dispatchUsername({type:'USER_INPUT', value: event.target.value})
         touchUsernameInput()
+    }
+
+    const {
+        inputState: bioState, 
+        dispatchInput: dispatchBio, 
+        touchValueInput: touchBioInput,
+        valueInputIsInvalid: bioInputIsInvalid,
+    } = useInput(validateBio)
+    const {value: bio, valueIsValid: bioIsValid, errorMessage: bioError} = bioState
+    const bioChangeHandler = (event) => {
+        dispatchBio({type:'USER_INPUT', value: event.target.value})
+        touchBioInput()
     }
 
     const [selectedImage, setSelectedImage] = useState({})
@@ -58,35 +69,29 @@ const EditProfile = ({isOpen, closeModal}) => {
     }
 
     useEffect(() => {
-        const getCurrentUser = async () => {
-            try {
-                const user = await getUser(currentUser.uid)
-                dispatchUsername({type:'USER_INPUT', value: user.username})
-                setSelectedImage({file: null, path: user.imageURI})
-                
-            } catch (error) {
-                console.log(error)
-            }
+        if (currentUser && !objectIsEmpty(currentUserData)) {
+            dispatchUsername({type:'INITIALIZE', value: currentUserData.username})
+            dispatchBio({type:'RESET', value: currentUserData.bio})
+            setSelectedImage({file: null, path: currentUserData.imageURI})
         }
 
-        getCurrentUser()
-    }, [isOpen])
+    }, [isOpen, currentUserData])
 
     const updateUserHandler = async (event) => {
         event.preventDefault()
 
-        let imageURI = ''
-        if (!objectIsEmpty(selectedImage)) {
+        let imageURI = currentUserData.imageURI
+        if (selectedImage.file) {
             console.log('selectedImage.file: ', selectedImage.file)
             const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
             if (imageData) {
                 imageURI = imageData.uri
-                // console.log(image)
             }
         }
 
         const userData = {
             username: username,
+            bio: bio,
             imageURI: imageURI
         }
         console.log(userData)
@@ -99,6 +104,8 @@ const EditProfile = ({isOpen, closeModal}) => {
             closeModal()
         }
     }
+
+    const formIsValid = usernameIsValid && bioIsValid
 
     return (
         <>
@@ -166,21 +173,22 @@ const EditProfile = ({isOpen, closeModal}) => {
                                 </div>
                                 
 
-                                {/* <Input 
-                                    id='description'
+                                <Input 
+                                    id='bio'
                                     label={'Bio'}
                                     isTextArea={true}
-                                    // value={description} 
-                                    // onChangeHandler={descriptionChangeHandler}
-                                    // valueInputIsInvalid={!descriptionIsValid}
-                                    // valueError={descriptionError}
-                                /> */}
+                                    textAreaHeight={11}
+                                    value={bio} 
+                                    onChangeHandler={bioChangeHandler}
+                                    valueInputIsInvalid={!bioIsValid}
+                                    valueError={bioError}
+                                />
                           
                           
                                 <div className='flex justify-center pt-[1rem]'>
                                     <Button
                                         onClickHandler={updateUserHandler}
-                                        isDisabled={!usernameIsValid}
+                                        isDisabled={!formIsValid}
                                         colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
                                     >
                                         Update Profile

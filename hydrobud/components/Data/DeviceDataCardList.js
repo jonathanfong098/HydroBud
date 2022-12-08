@@ -49,6 +49,7 @@ const DeviceDataCardList = ({devices}) => {
                         autoFocus
                         formatResult={formatResult}
                         style={searchBarStyle}
+                        placeholder='Device Name or ID'
                     />
                 </div>
                 { devicesSearchResult.length > 0 ? (

@@ -1,6 +1,6 @@
 import React, {useReducer, useState, useEffect} from 'react'
 
-const useInput = (validateValue) => {
+const useInput = (validateValue, initialValue = '') => {
     const inputReducer = (state, action) => {
       const { type, value } = action
 
@@ -12,6 +12,13 @@ const useInput = (validateValue) => {
               valueIsValid: valueIsValid, 
               errorMessage: errorMessage,
             }
+        } else if (type === 'RESET') {
+          console.log('resetting')
+          return {
+            value: value, 
+            valueIsValid: true, 
+            errorMessage: '',
+          } 
         }
     
         return {
@@ -22,7 +29,7 @@ const useInput = (validateValue) => {
     }
     
     const [inputState, dispatchInput] = useReducer(inputReducer, {
-        value: '',
+        value: initialValue,
         valueIsValid: false,
         errorMessage: '',
     })
@@ -33,7 +40,6 @@ const useInput = (validateValue) => {
         setValueInputTouched(true)
       }
     }
-
     const untouchValueInput = () => {
       if (valueInputTouched){
         setValueInputTouched(false)
@@ -46,13 +52,19 @@ const useInput = (validateValue) => {
       setValueInputIsInvalid(result)
     }, [inputState.valueIsValid, valueInputTouched])
 
+    const resetValue = (resetValue = '') => {
+      dispatchInput({type: 'RESET', value: resetValue})
+      untouchValueInput()
+    }
+
     return {
       inputState: inputState,
       dispatchInput: dispatchInput,
       valueInputTouched: valueInputTouched,
       touchValueInput: touchValueInput,
       untouchValueInput: untouchValueInput,
-      valueInputIsInvalid: valueInputIsInvalid
+      valueInputIsInvalid: valueInputIsInvalid,
+      resetValue: resetValue
     }
 }
 

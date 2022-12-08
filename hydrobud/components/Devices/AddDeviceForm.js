@@ -29,7 +29,8 @@ const AddDeviceForm = () => {
         inputState: nameState, 
         dispatchInput: dispatchName, 
         touchValueInput: touchNameInput,
-        valueInputIsInvalid: nameInputIsInvalid
+        valueInputIsInvalid: nameInputIsInvalid,
+        resetValue: resetName
     } = useInput(validateDeviceName)
     const {value: name, valueIsValid: nameIsValid, errorMessage: nameError} = nameState
     const nameChangeHandler = (event) => {
@@ -41,7 +42,8 @@ const AddDeviceForm = () => {
         inputState: monitorState, 
         dispatchInput: dispatchMonitor,
         touchValueInput: touchMonitorInput,
-        valueInputIsInvalid: monitorInputIsInvalid
+        valueInputIsInvalid: monitorInputIsInvalid,
+        resetValue: resetMonitor
     } = useInput(validateDeviceMonitor)
     const {value: monitor, valueIsValid: monitorIsValid, errorMessage: monitorError} = monitorState
     const monitorChangeHandler = (event) => {
@@ -56,7 +58,7 @@ const AddDeviceForm = () => {
     const {valueIsValid: descriptionIsValid, errorMessage: descriptionError } = validateDeviceDescription(description)
 
 
-    const [selectedImage, setSelectedImage] = useState({})
+    const [selectedImage, setSelectedImage] = useState({file: null, path: null})
 
 
     const [ppmMetricEnabled, setPpmMetricEnabled] = useState(true)
@@ -88,13 +90,24 @@ const AddDeviceForm = () => {
         }
     }
 
+    const resetForm = () => {
+        resetName()
+        resetMonitor()
+        setDescription('')
+        setSelectedImage({file: null, path: null})
+        setPpmMetricEnabled(true)
+        setTempMetricEnabled(true)
+        setLevelMetricEnabled(true)
+    }
+
     const addDeviceHandler = async (event) => {
         event.preventDefault()
     
         try {
             let imageURI = null;
 
-            if (!objectIsEmpty(selectedImage)) {
+            if (selectedImage.file != null) {
+                console.log('hi')
                 const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
                 if (imageData) {
                     imageURI = imageData.uri
@@ -119,18 +132,20 @@ const AddDeviceForm = () => {
                 description: description,
                 imageURI: imageURI,
                 metrics: metricsArray,
+                favorite: false,
                 timestamp: serverTimestamp()
             }
             console.log('deviceData: ', deviceData)
 
             const deviceID = await createDevice(deviceData)
             setAlertType('success')
-            setAlertMessage(`Created device ${name}\n with Device ID ${deviceID}`)
+            setAlertMessage(`Created device ${name}\n with device ID ${deviceID}`)
         } catch (error) {
-            console.log(error)
+            console.log('error', error)
             setAlertType('error')
             setAlertMessage('Failed to create device')
         } finally {
+            resetForm()
             openAlert()
         }
     }
@@ -174,6 +189,7 @@ const AddDeviceForm = () => {
                         id='description'
                         label={'Description'}
                         isTextArea={true}
+                        textAreaHeight={20}
                         value={description} 
                         onChangeHandler={descriptionChangeHandler}
                         valueInputIsInvalid={!descriptionIsValid}
@@ -211,12 +227,12 @@ const AddDeviceForm = () => {
                         setEnabled={setPpmMetricEnabled}
                     />
                     <Toggle 
-                        label={'Temp'}
+                        label={'TEMP'}
                         enabled={tempMetricEnabled}
                         setEnabled={setTempMetricEnabled}
                     />
                     <Toggle 
-                        label={'Level'}
+                        label={'LEVEL'}
                         enabled={levelMetricEnabled}
                         setEnabled={setLevelMetricEnabled}
                     />

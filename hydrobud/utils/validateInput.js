@@ -34,9 +34,9 @@ const validateEmail = (value) => {
     let emailIsValid = false
     let errorMessage = ''
 
-    const usernameIsEmpty = value.trim() == ''
+    const emailIsEmpty = value.trim() == ''
 
-    if (usernameIsEmpty) {
+    if (emailIsEmpty) {
         errorMessage = 'Email cannot be empty'
     } else if (!validEmail(value)) {
         errorMessage = 'Email is not valid'
@@ -60,6 +60,8 @@ const validateUsername = (value) => {
         errorMessage = 'Username cannot be empty'
     } else if (includesWhitespace(value)) {
         errorMessage = 'Username should not include whitespace'
+    } else if (value.length > 30) {
+        errorMessage = 'Username should not be longer than 30 characters'
     } else {
         usernameIsValid = true
     }
@@ -112,13 +114,33 @@ const validateConfirmPassword = (valueToCheck, valueToCheckAgainst) => {
     }
 }
 
+const validateBio = (value) => {
+    let biosValid = false
+    let errorMessage = ''
+
+    const bioIsEmpty = value.trim() == ''
+
+    if (bioIsEmpty) {
+        errorMessage = 'Bio cannot be empty'
+    } else if (value.length > 300) {
+        errorMessage = 'Bio cannot be longer than 300 characters'
+    } else {
+        biosValid = true
+    }
+    
+    return {
+        valueIsValid: biosValid,
+        errorMessage: errorMessage
+    }
+}
+
 const validateDeviceName = (value) => {
     let deviceNameIsValid = false
     let errorMessage = ''
 
-    const usernameIsEmpty = value.trim() == ''
+    const deviceNameIsEmpty = value.trim() == ''
 
-    if (usernameIsEmpty) {
+    if (deviceNameIsEmpty) {
         errorMessage = 'Device name cannot be empty'
     } else if (value.length > 50) {
         errorMessage = 'Device name is too long'
@@ -136,12 +158,12 @@ const validateDeviceMonitor= (value) => {
     let monitorIsValid = false
     let errorMessage = ''
 
-    const usernameIsEmpty = value.trim() == ''
+    const deviceMonitoryIsEmpty = value.trim() == ''
 
-    if (usernameIsEmpty) {
-        errorMessage = 'Monitor cannot be empty'
+    if (deviceMonitoryIsEmpty) {
+        errorMessage = 'Items device is monitoring cannot be empty'
     } else if (value.length > 100) {
-        errorMessage = 'Device name is too long'
+        errorMessage = 'Items device is monitoring is too long'
     } else {
         monitorIsValid = true
     }
@@ -158,7 +180,7 @@ const validateDeviceDescription= (value) => {
     let errorMessage = ''
 
     if (value.length > 300) {
-        errorMessage = 'Device name is too long'
+        errorMessage = 'Device description is too long'
     } else {
         devicesDescriptionIsValid = true
     }
@@ -175,10 +197,12 @@ const validatePpm= (value) => {
     let ppmIsValid = false
     let errorMessage = ''
 
-    const usernameIsEmpty = value.trim() == ''
+    const ppmIsEmpty = value.trim() == ''
 
-    if (usernameIsEmpty) {
+    if (ppmIsEmpty) {
         errorMessage = 'PPM cannot be empty'
+    } else if (parseInt(value) < 0 || parseInt(value) > 1200) {
+        errorMessage = 'PPM has to between 0 and 1200'
     } else {
         ppmIsValid = true
     }
@@ -190,19 +214,57 @@ const validatePpm= (value) => {
 }
 
 const validateTemperature= (value) => {
-    let ppmIsValid = false
+    let temperatureIsValid = false
+    let errorMessage = ''
+
+    const temperatureIsEmpty = value.trim() == ''
+
+    if (temperatureIsEmpty) {
+        errorMessage = 'Temperature cannot be empty'
+    } else if (parseInt(value) < 0 || parseInt(value) > 100){
+        errorMessage = 'Temperature has to between 0F and 100F'
+    } else {
+        temperatureIsValid = true
+    }
+
+    return {
+        valueIsValid: temperatureIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+const validateAlarmName= (value) => {
+    let alarmIsValid = false
     let errorMessage = ''
 
     const usernameIsEmpty = value.trim() == ''
 
     if (usernameIsEmpty) {
-        errorMessage = 'Temperature cannot be empty'
+        errorMessage = 'Alarm cannot be empty'
+    } else if (value.length > 20) {
+        errorMessage = 'Alarm name is too long'
     } else {
-        ppmIsValid = true
+        alarmIsValid = true
     }
 
     return {
-        valueIsValid: ppmIsValid,
+        valueIsValid: alarmIsValid,
+        errorMessage: errorMessage
+    }
+}
+
+const validateAlarmDescription = (value) => {
+    let alarmDescriptionIsValid = false
+    let errorMessage = ''
+
+    if (value.length > 300) {
+        errorMessage = 'Alarm description is too long'
+    } else {
+        alarmDescriptionIsValid = true
+    }
+
+    return {
+        valueIsValid: alarmDescriptionIsValid,
         errorMessage: errorMessage
     }
 }
@@ -210,15 +272,18 @@ const validateTemperature= (value) => {
 
 
 export { 
-    validatePassword, 
-    validateConfirmPassword, 
     validateUsername, 
     validateEmail,
+    validatePassword, 
+    validateConfirmPassword, 
+    validateBio,
     validateDeviceName,
     validateDeviceMonitor,
     validateDeviceDescription,
     validatePpm,
-    validateTemperature
+    validateTemperature,
+    validateAlarmName,
+    validateAlarmDescription
 }
 
  

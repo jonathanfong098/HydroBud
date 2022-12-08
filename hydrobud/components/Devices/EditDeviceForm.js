@@ -55,7 +55,7 @@ const EditDeviceForm = ({deviceID}) => {
     const {valueIsValid: descriptionIsValid, errorMessage: descriptionError } = validateDeviceDescription(description)
 
 
-    const [selectedImage, setSelectedImage] = useState({})
+    const [selectedImage, setSelectedImage] = useState({file: null, path: null})
 
 
     const [ppmMetricEnabled, setPpmMetricEnabled] = useState(true)
@@ -115,13 +115,15 @@ const EditDeviceForm = ({deviceID}) => {
         event.preventDefault()
         
         try {
-            // let imageURI = null
-            let imageURI = 'https://hydrobud-media.s3.us-west-2.amazonaws.com/1669527738929.jpeg'
-
-            // const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
-            // if (imageData) {
-            //     imageURI = imageData.uri
-            // }
+            let imageURI = initialDeviceData.imageURI
+            if (selectedImage.file) {
+                console.log('selectedImage.file: ', selectedImage.file)
+                const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
+                if (imageData) {
+                    imageURI = imageData.uri
+                }
+            }
+    
 
             const metricsArray = []
             if (ppmMetricEnabled) {
@@ -147,7 +149,7 @@ const EditDeviceForm = ({deviceID}) => {
 
             await updateDevice(deviceID, deviceData)
             setAlertType('success')
-            setAlertMessage(`Update device ${name}`)
+            setAlertMessage(`Updated device ${name}`)
         } catch (error) {
             // throw error
             setAlertType('error')

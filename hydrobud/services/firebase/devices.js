@@ -1,8 +1,13 @@
 import { doc, collection, query, where, orderBy, onSnapshot, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDB } from './firebase-config'
+import { getAlarms } from './alert'
+
+const createDeviceDoc = (deviceID) => {
+    return doc(firebaseDB, 'devices', deviceID)
+}
 
 const getDevicesQuery = (userID) => {
-    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID), orderBy('timestamp', 'desc'))
+    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID), orderBy('favorite', 'desc'), orderBy('timestamp', 'desc'))
     // const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID))
     return q
 } 
@@ -54,18 +59,7 @@ const createDeviceDataListener = (deviceID, deviceDataCallback) => {
         const deviceData = snapshot.docs.map(doc => doc.data())
         console.log(deviceData)
         deviceDataCallback(deviceData)
-
-        // snapshot.docChanges().forEach((change) => {
-        //     if (change.type === 'added') {
-        //         console.log('New device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'modified')s {
-        //         console.log('Modified device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'removed') {
-        //         console.log('Removed device: ', change.doc.data())
-        //     }
-        //   })
+         
     })
 
     return unsubscribeDevices
@@ -109,6 +103,15 @@ const deleteDevice = async (deviceID) => {
     }
 }
 
+const updateFavorite = async (deviceID, favorite) => {
+    const deviceDocument = createDeviceDoc(deviceID)
+
+    // Set the "capital" field of the city 'DC'
+    await updateDoc(deviceDocument, {
+      favorite: favorite
+    });
+  }
+
 const addDataToDevice = async (deviceID, data) => {
     const dataDocument = doc(collection(firebaseDB, 'device_data'))
     console.log(dataDocument)
@@ -122,14 +125,16 @@ const addDataToDevice = async (deviceID, data) => {
 }
 
 export { 
+    createDeviceDoc,
     getDevicesQuery, 
     getDeviceQuery,
     getDeviceDataQuery, 
     createDevice, 
     updateDevice, 
     deleteDevice,
+    updateFavorite,
     addDataToDevice,
     createDeviceListener, 
     createDevicesListener, 
-    createDeviceDataListener
+    createDeviceDataListener,
 }

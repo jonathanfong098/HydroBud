@@ -22,7 +22,6 @@ import useInput from '../../hooks/use-input'
 const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     const router = useRouter()
 
-    const [isLevel, setIsLevel] = useState(true)
     const [currentDeviceData, setDeviceData] = useState([])
 
     useEffect(() => {
@@ -55,19 +54,26 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
         touchTemperatureInput()
     }
 
+    const [isLevel, setIsLevel] = useState(true)
+
+    const resetForm = () => {
+        dispatchPpm({type:'RESET', value: ''})
+        dispatchTemperature({type:'RESET', value: ''})
+        setIsLevel(true)
+    }
+
     //manage alert state
     const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
     const [alertType, setAlertType] = useState('')  
     const closeAddDataModal = () => {
+        resetForm()
         closeModal()
-
-        dispatchPpm({type:'INITIALIZE', value: ''})
-        dispatchTemperature({type:'INITIALIZE', value: ''})
-        setIsLevel(true)
-
-        untouchPpm()
-        untouchTemperatureInput()
     }
+
+    useEffect(() => {
+        dispatchPpm({type:'INITIALIZE', value: '0'})
+        dispatchTemperature({type:'INITIALIZE', value: '0'})
+    },[isOpen])
 
     const addDataHandler = async (event) => {
 
@@ -103,16 +109,14 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             setAlertMessage(`Added data`)
             // setAddDataAlertMessage(`Added data`)
         } catch (error) {
-            throw error
+            // throw error
             setAlertType('error')
             setAlertMessage('Failed to add data')
             // setAddDataAlertMessage('Failed to add data')
         } finally {
             closeModal()
 
-            dispatchPpm({type:'INITIALIZE', value: ''})
-            dispatchTemperature({type:'INITIALIZE', value: ''})
-            setIsLevel(true)
+            resetForm()
             
             // openAddDataAlert()
             openAlert()

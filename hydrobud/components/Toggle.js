@@ -10,9 +10,8 @@ const Toggle = ({label, enabled, setEnabled}) => {
                     onChange={setEnabled}
                     className={`${
                         enabled ? 'bg-[#B6CB9E]' : 'bg-[#FFFFFF]'
-                    } relative inline-flex h-[3rem] w-[5.3rem] items-center rounded-full`}
+                    } inline-flex h-[3rem] w-[5.3rem] items-center rounded-full shadow-md`}
                     >
-                    <span className="sr-only">Enable {label}</span>
                     <span
                         className={`${
                         enabled ? 'translate-x-[2.9rem]' : 'translate-x-[0.3rem]'
