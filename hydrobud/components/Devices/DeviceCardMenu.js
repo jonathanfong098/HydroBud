@@ -9,7 +9,7 @@ import { deleteDevice as deleteDeviceRequest} from '../../services/firebase/devi
 // import ForwardPropsLink from '../ForwardPropsLink'
 import Alert from '../Alert'
 import LogoMenuItem from '../LogoMenuItem'
-import AddData from './AddData'
+import AddData from './AddData/AddData'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'

@@ -7,8 +7,6 @@ import Metric from "./Metric"
 import { updateFavorite } from '../../services/firebase/devices'
 
 const DeviceCard = ({device}) => {
-    // console.log(device.image)
-
     let ppmEnabled = false
     let tempEnabled = false
     let levelEnabled = false
@@ -86,14 +84,6 @@ const DeviceCard = ({device}) => {
                         enabled={levelEnabled}
                     />
                 </div>
-                
-                {/* <div className='min-w-fit min-h-fit py-[1rem] px-[1.8rem] bg-[#B6CB9E] hover: bg-[#B6CB9E]'></div>
-                <Link 
-                    href='/dashboard'
-                    className='min-w-fit min-h-fit py-[1rem] px-[1.8rem] bg-[#B6CB9E] focus: bg-[#9CBA96]'
-                >
-                    View Data
-                </Link> */}
                 <div class='flex justify-center pt-[2rem]'>
                     <Link 
                         href={`/dashboard#device-data-${device.id}`}

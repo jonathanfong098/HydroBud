@@ -20,14 +20,18 @@ import { useAuthContext } from '../../context/AuthContext'
 import useAlert from '../../hooks/use-alert'
 import useInput from '../../hooks/use-input'
 
-const NotificationModal = ({isOpen, closeModal, user}) => {
+const NotificationModal = ({isOpen, closeModal, user, setNumberOfNotifications}) => {
     const [notifications, setNotifications] = useState([])
 
     useEffect(() => {
-        // if (user) {
+        if (user) {
             const unsubscribeDevices = createNotificationsListener(user.uid, setNotifications)
-        // }
+        }
     }, [])
+
+    useEffect(() => {
+        setNumberOfNotifications(notifications.length)
+    }, [notifications])
 
     console.log('notifications in modal: ', notifications)
 
@@ -67,6 +71,8 @@ const NotificationModal = ({isOpen, closeModal, user}) => {
                                                 return (
                                                     <Notification
                                                         key={notification.id}
+                                                        id={notification.id}
+                                                        userID={user.uid}
                                                         message={notification.message}
                                                         description={notification.description}
                                                     />

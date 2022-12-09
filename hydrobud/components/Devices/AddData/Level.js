@@ -1,23 +1,21 @@
 import { RadioGroup } from '@headlessui/react'
 
-export const comparisons = [
-  {name: 'Greater'},
-  {name: 'Greater/Equal'},
-  {name: 'Lower/Equal'},
-  {name: 'Lower'},
+export const levelOptions = [
+  {name: 'Above Water Level'},
+  {name: 'Below Water Level'}
 ]
 
-const Comparison = ({comparison, setComparison}) => {
+const Level = ({isLevel, setIsLevel}) => {
   return (
     <RadioGroup 
-        value={comparison} 
-        onChange={setComparison} 
-        className='flex flex-row space-x-[1rem]'
+        value={isLevel} 
+        onChange={setIsLevel} 
+        className='flex flex-row w-full space-x-[4rem] justify-center'
     >
-      {comparisons.map((comparison) => (
+      {levelOptions.map((levelOption) => (
         <RadioGroup.Option
-                key={comparison.name}
-                value={comparison.name}
+                key={levelOption.name}
+                value={levelOption.name}
                 className={({ checked }) =>
                   `
                   ${
@@ -35,7 +33,7 @@ const Comparison = ({comparison, setComparison}) => {
                               checked ? 'text-white' : 'text-black'
                             }`}
                           >
-                            {comparison.name}
+                            {levelOption.name}
                           </RadioGroup.Label>
                      
                         </div>
@@ -47,4 +45,4 @@ const Comparison = ({comparison, setComparison}) => {
   )
 }
 
-export default Comparison
+export default Level

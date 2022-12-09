@@ -22,4 +22,8 @@ const objectIsEmpty = (object) => {
     return (Object.keys(object).length === 0 && object.constructor === Object)
 }
 
-export { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail, objectIsEmpty }
+const percentage = (partialValue, totalValue) => {
+    return (100 * partialValue) / totalValue;
+ } 
+
+export { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail, objectIsEmpty, percentage}

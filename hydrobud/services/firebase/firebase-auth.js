@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
-import { collection, addDoc, doc, setDoc, getDoc, onSnapshot, updateDoc, query , orderBy} from 'firebase/firestore'
+import { collection, addDoc, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, query , orderBy} from 'firebase/firestore'
 import { firebaseAuth, firebaseDB } from './firebase-config'
 
 const createUserDoc = (userID) => {
@@ -65,8 +65,11 @@ const updateUser = async (userID, userData) => {
 }
 
 const getNotificationsQuery = (userID) => {
-  const q = query(collection(firebaseDB, 'users', userID, 'notifications'), orderBy('timestamp', 'desc'))
-  return q
+  return query(collection(firebaseDB, 'users', userID, 'notifications'), orderBy('timestamp', 'desc'))
+}
+
+const createNotificationDoc = (userID, notificationID) => {
+  return doc(firebaseDB, `users/${userID}/notifications/${notificationID}`)
 }
 
 const createNotificationsListener = async (userID, notificationsCallback) => {
@@ -93,6 +96,18 @@ const createNotification = async (userID, notificationData) => {
   const notificationDoc = await addDoc(notificationCol, notificationData)
 
   return notificationDoc.id
+}
+
+const deleteNotification = async (userID, notificationID) => {
+  try {
+    const notificationDoc = createNotificationDoc(userID, notificationID)
+    if (notificationDoc) {
+      console.log('notificationDoc', notificationDoc)
+      await deleteDoc(notificationDoc)
+    }
+  } catch (error) {
+      throw error
+  }
 }
 
 const logout = () => {
@@ -131,5 +146,6 @@ export {
           updateUser,
           createNotificationsListener,
           createNotification,
+          deleteNotification,
           errorMessage
         }

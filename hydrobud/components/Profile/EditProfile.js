@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { serverTimestamp } from 'firebase/firestore'
-import { useRouter } from 'next/router'
 
-import { addDataToDevice } from '../../services/firebase/devices'
-import { validatePpm, validateTemperature } from '../../utils/validateInput'
 import { validateUsername, validateBio } from '../../utils/validateInput'
-import { getUser, creteUserListener, updateUser} from '../../services/firebase/firebase-auth'
+import { updateUser} from '../../services/firebase/firebase-auth'
 import { uploadImageToHydrobudMedia } from '../../services/s3'
 import { objectIsEmpty } from '../../utils/helper'
 

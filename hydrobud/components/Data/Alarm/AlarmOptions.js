@@ -2,24 +2,24 @@ import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { serverTimestamp } from 'firebase/firestore'
 
-// import { createAlarm } from '../../../services/firebase/devices'
 import { createAlert } from '../../../services/firebase/alert'
 import { validatePpm, validateTemperature, validateAlarmName, validateAlarmDescription} from '../../../utils/validateInput'
 
+// importing custom components
 import Input from '../../Input'
 import Toggle from '../../Toggle'
 import Button from '../../Button'
 import Comparison from './Comparison'
+import Level from '../../Devices/AddData/Level'
 import Alert from '../../Alert'
 
+// importing custom hooks
 import useInput from '../../../hooks/use-input'
 import useAlert from '../../../hooks/use-alert'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
-
-// const metrics = ['ppm', 'temp', 'level']
 
 const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreatedAlarmMessage, setCreatedAlarmType}) => {
     const [selectedMetric, setSelectedMetric] = useState(deviceMetrics[0])
@@ -69,7 +69,7 @@ const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreated
     }
     const {valueIsValid: descriptionIsValid, errorMessage: descriptionError } = validateAlarmDescription(description)
 
-    const [isLevel, setIsLevel] = useState(true)
+    const [isLevel, setIsLevel] = useState('')
 
     const [comparison, setComparison] = useState('')
 
@@ -78,7 +78,7 @@ const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreated
         setDescription('')
         dispatchPpm({type:'RESET', value: ''})
         dispatchTemperature({type:'RESET', value: ''})
-        setIsLevel(true)
+        setIsLevel('')
         setComparison('')
     }
 
@@ -103,7 +103,13 @@ const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreated
         } else if (selectedMetric === 'temp') {
             finalAlertData = {...initialAlertData, threshold: parseInt(temperature), comparison: comparison}
         } else if (selectedMetric === 'level') {
-            finalAlertData = {...initialAlertData, threshold: isLevel}
+            let levelToAdd
+            if (isLevel === 'Above Water Level'){
+                levelToAdd = true
+            } else {
+                levelToAdd = false
+            }
+            finalAlertData = {...initialAlertData, threshold: levelToAdd}
         } else {
             throw new Error('Invalid Metric')
         }
@@ -139,7 +145,6 @@ const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreated
     } else {
         formIsValid = nameAndDescriptionIsValid
     }
-    // console.log('deviceMetrics: ', deviceMetrics)
 
     return (
         <>
@@ -230,11 +235,15 @@ const AlarmOptions = ({children, deviceID, deviceMetrics, closeModal, setCreated
 
                 {deviceMetrics.includes('level') ? (
                     <Tab.Panel className='flex justify-center py-[1rem] w-[29.28rem]'>
-                        <Toggle 
+                            <Level
+                                isLevel={isLevel}
+                                setIsLevel={setIsLevel}
+                            />
+                        {/* <Toggle 
                             label={'Level:'}
                             enabled={isLevel}
                             setEnabled={setIsLevel}
-                        />
+                        /> */}
                     </Tab.Panel>
                 ) : (<></>)}
                 </div>

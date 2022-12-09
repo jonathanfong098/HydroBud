@@ -26,12 +26,23 @@ const DeviceDataCard = ({device}) => {
     }, [])
 
     useEffect(() => {
+        // console.log('setting off alarm')
         for (const alarm of deviceAlarms){
             if (!alarm.on){
                 console.log('deviceData[0]', deviceData[0])
                 console.log('deviceAlarm', alarm)
-                if (alarm.type === 'ppm'){
-                    setOffAlarm(alarm.comparison, alarm.threshold, deviceData[0].ppm, device, currentUser.uid)
+                if (!alarm.on){
+                    if (alarm.type === 'ppm'){
+                        setOffAlarm(alarm, deviceData[0].ppm, device, currentUser.uid)
+                    } else if (alarm.type ==='temp'){
+                        setOffAlarm(alarm, deviceData[0].temp, device, currentUser.uid)
+                    } else if (alarm.type === 'level'){
+                        setOffAlarm(alarm, deviceData[0].level, device, currentUser.uid)
+                    } else {
+                        return 
+                    }
+                } else {
+                    return 
                 }
             }
         }
@@ -78,7 +89,7 @@ const DeviceDataCard = ({device}) => {
                             />
                         ):(<></>)}
                         
-                        {deviceData[0].ppm ? (
+                        {deviceData[0].ppm !=null ? (
                             <ReactSpeedometer
                                 width={250}
                                 height={250} 
@@ -97,7 +108,7 @@ const DeviceDataCard = ({device}) => {
                             />
                         ):(<></>)}
 
-                         {deviceData[0].temp ? (
+                         {deviceData[0].temp != null ? (
                               <ReactSpeedometer
                               width={250}
                               height={250} 

@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 // importing custom components
 import Alert from '../Alert'
-import AddData from '../Devices/AddData'
+import AddData from '../Devices/AddData/AddData'
 import AddAlarm from './Alarm/AddAlarm'
 import AlarmList from './Alarm/AlarmList'
 
@@ -158,7 +158,7 @@ const DataCardMenu = ({device}) => {
                                         alt='add alert'
                                     />
                                 </div>
-                                <div>Add Alert</div>
+                                <div>Add Alarm</div>
                             </div>
                         </Menu.Item>
                         <Menu.Item>
@@ -168,12 +168,12 @@ const DataCardMenu = ({device}) => {
                             >
                                 <div className='relative w-[1.5rem] h-[1.5rem]'>
                                     <Image
-                                        src='/images/plus_circle.svg'
+                                        src='/images/alerts.svg'
                                         layout='fill'
-                                        alt='add alert'
+                                        alt='notifications'
                                     />
                                 </div>
-                                <div>View Alerts</div>
+                                <div>View Alarms</div>
                             </div>
                         </Menu.Item>
                     </Menu.Items>

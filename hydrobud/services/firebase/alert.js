@@ -1,11 +1,10 @@
-import { doc, collection, query, where, orderBy, onSnapshot, deleteDoc, setDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, collection, query, where, orderBy, onSnapshot, deleteDoc, setDoc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
 import { firebaseDB } from './firebase-config'
 import { createDeviceDoc } from './devices'
 import { createNotification } from './firebase-auth'
 
 const createAlarmDoc = (deviceID, alarmID) => {
-    const alarmDoc = doc(firebaseDB, 'devices', deviceID, 'alarms', alarmID)
-    return alarmDoc
+    return doc(firebaseDB, `devices/${deviceID}/alarms/${alarmID}`)
 }
 
 const createAlert = async (deviceID, alertData) => {
@@ -31,47 +30,140 @@ const createAlarmsListener = (deviceID, alarmsCallback) => {
         const data = doc.data()
         return {...data, id: doc.id}
     }) 
-    // console.log('notifications: ', notifications)
-
-    // for (const alarm of alarms) {
-    //     if ()
-    // }
-
+    
     alarmsCallback(alarms)
 
     return unsubscribeAlarms
     })
 }
 
-const setOffAlarm = async (comparison, alarmData, deviceData, device, userID) => {
-    console.log('setOffAlarm')
-    switch(comparison){
-        case 'Greater':
-            if (alarmData > deviceData) {
-                console.log('true')
+const setOffAlarm = async (alarm, deviceData, device, userID) => {
+    console.log('setOffAlarm', alarm, deviceData)
+    if (alarm.type === 'ppm' || alarm.type === 'temp'){
+        console.log('alarm.type === ppm|| alarm.type === temp')
+        if (alarm.comparison === 'Greater') {
+            console.log('deviceData > alarm.threshold')
+            if (deviceData > alarm.threshold) {
+                if (!alarm.on){
+                    await toggleAlarm(device.id, alarm.id, alarm.on)
+                    await createNotification(userID, {
+                        message: alarmMessage(alarm),
+                        description: `Alarm Name: ${alarm.name}\n Device ID: #${device.id}\n`,
+                        timestamp: serverTimestamp()
+                    })
+                }
+            }
+        } else if (alarm.comparison === 'Greater/Equal') {
+            console.log('deviceData >= alarm.threshold')
+            if (deviceData >= alarm.threshold) {
+                if (!alarm.on){
+                    await toggleAlarm(device.id, alarm.id, alarm.on)
+                    await createNotification(userID, {
+                        message: alarmMessage(alarm),
+                        description: `Alarm Name: ${alarm.name}\n Device ID: #${device.id}\n`,
+                        timestamp: serverTimestamp()
+                    })
+                }
+            }
+        } else if (alarm.comparison === 'Lower/Equal') {
+            console.log('deviceData <= alarm.threshold')
+            if (deviceData <= alarm.threshold) {
+                if (!alarm.on){
+                    await toggleAlarm(device.id, alarm.id, alarm.on)
+                    await createNotification(userID, {
+                        message: alarmMessage(alarm),
+                        description: `Alarm Name: ${alarm.name}\n Device ID: #${device.id}\n`,
+                        timestamp: serverTimestamp()
+                    })
+                }
+            }
+        } else if (alarm.comparison === 'Lower') {
+            console.log('deviceData < alarm.threshold')
+            if (deviceData < alarm.threshold) {
+                if (!alarm.on){
+                    await toggleAlarm(device.id, alarm.id, alarm.on)
+                    await createNotification(userID, {
+                        message: alarmMessage(alarm),
+                        description: `Alarm Name: ${alarm.name}\n Device ID: #${device.id}\n`,
+                        timestamp: serverTimestamp()
+                    })
+                }
+            }
+        } else {
+            return 
+        } 
+    } else if (alarm.type === 'level') {
+        if (alarm.threshold  === deviceData){
+            console.log('alarm.threshold  === deviceData')
+            if (!alarm.on){
+                await toggleAlarm(device.id, alarm.id, alarm.on)
                 await createNotification(userID, {
-                    message: `${device.name} exceeded ${alarmData}PPM`,
-                    description: `Device ID #${device.id}` ,
+                    message: `${alarm.name} is ${alarm.threshold ? 'above water level' : 'below water level'}`,
+                    description: `Alarm Name: ${alarm.name}\n Device ID: #${device.id}\n`,
                     timestamp: serverTimestamp()
                 })
             }
-        case 'Greater/Equal':
-            return (alarmData >= deviceData)
-        case 'Lower/Equal':
-            return (alarmData <= deviceData)
-        case 'Lower':
-            return (alarmData < deviceData)
-        default: 
-            return false
+        } 
+    } else {
+        console.log('noting')
+        return
     }
+            
 }
 
 const toggleAlarm = async (deviceID, alarmID, alarmState) => {
     const alarmDoc = createAlarmDoc(deviceID, alarmID)
     
-    await updateDoc(alarmDoc, {
-        on: !alarmState
-    })
+    try {
+        await updateDoc(alarmDoc, {
+            on: !alarmState
+        })
+    } catch (error) {
+        throw error
+    }
 }
 
-export { createAlert, getAlarms, createAlarmsListener, setOffAlarm, toggleAlarm}
+const deleteAlarm = async (deviceID, alarmID) => {
+    try {
+        const alarmDoc = await createAlarmDoc(deviceID, alarmID)
+        if (alarmDoc) {
+            await deleteDoc(alarmDoc)
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
+const alarmComparisonMessage = (alarm) => {
+    switch(alarm.comparison){
+        case 'Greater':
+            return (`${alarm.name} is above ${alarm.threshold}`)
+        case 'Greater/Equal':
+            return (`${alarm.name} is above or is equal to ${alarm.threshold}`)
+        case 'Lower/Equal':
+            return (`${alarm.name} is below or is equal to ${alarm.threshold}`)
+        case 'Lower':
+            return (`${alarm.name} is below ${alarm.threshold}`)
+        default: 
+            return ''
+    }
+}
+
+const alarmMessage = (alarm) => {
+    switch(alarm.type){
+        case 'ppm':
+            return (alarmComparisonMessage(alarm) + 'PPM')
+        case 'temp':
+            return (alarmComparisonMessage(alarm) + 'F')
+        case 'level':
+            if (alarm.threshold) {
+                return (`${alarm.name} is above water level`)
+            } else {
+                return (`${alarm.name} is below water level`)
+            }
+        default: 
+            return ''
+    }
+}
+
+export { createAlert, getAlarms, createAlarmsListener, setOffAlarm, toggleAlarm, deleteAlarm, alarmMessage}
