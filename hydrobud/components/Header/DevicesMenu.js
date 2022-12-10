@@ -23,21 +23,39 @@ const DevicesMenu = ({label}) => {
                     <Menu.Items className='flex flex-col absolute top-[2.5rem] w-full divide-y divide-gray-100 rounded-[1rem] bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                         <LogoMenuItem
                             label='View Data'
-                            src='/images/view_data.svg'
-                            href='/dashboard'
                             alt='view_data'
+                            src='/images/view_data.svg'
+                            isLink={true}
+                            href='/dashboard'
+                            hover={{style:'hover:bg-[#B6CB9E] hover:rounded-t-[1rem]'}}
+                            deviceMenu
                         />
                         <LogoMenuItem
                             label='View Devices'
                             src='/images/view_devices.svg'
-                            href='/devices'
                             alt='view_devices'
+                            href='/devices'
+                            isLink={true}
+                            hover={{style:'hover:bg-[#B6CB9E]'}}
+                            deviceMenu
+                        />
+                        <LogoMenuItem
+                            label='View Shared Devices'
+                            src='/images/view_devices.svg'
+                            alt='shared_devices'
+                            href='/shared-devices'
+                            isLink={true}
+                            hover={{style:'hover:bg-[#B6CB9E]'}}
+                            deviceMenu
                         />
                         <LogoMenuItem
                             label='Add Device'
                             src='/images/add_device.svg'
-                            href='/add-device'
                             alt='add_device'
+                            href='/add-device'
+                            isLink={true}
+                            hover={{style:'hover:bg-[#B6CB9E] hover:rounded-b-[1rem]'}}
+                            deviceMenu
                         />
                     </Menu.Items>
                 </Transition>

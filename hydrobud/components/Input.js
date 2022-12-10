@@ -1,7 +1,6 @@
 import React from 'react'
-import Image from 'next/image'
 
-const Input = ({children, isTextArea, inputType, id, name, label, value, onChangeHandler, valueInputIsInvalid, valueError}) => {
+const Input = ({children, isTextArea, textAreaHeight, inputType, id, name, label, value, onChangeHandler, valueInputIsInvalid, valueError}) => {
     return (
         <div className='flex flex-col'>
             <label 
@@ -10,7 +9,7 @@ const Input = ({children, isTextArea, inputType, id, name, label, value, onChang
             >
                 {label}:
             </label>
-            <div className={`flex flex-row w-full ${isTextArea ? 'h-[18rem]' : 'h-[4rem]'} bg-[#FFFFFF] rounded-[1rem] border-[0.13rem] ${valueInputIsInvalid ? 'border-[#EE392F]' : 'border-[#FAFAFA]'} focus:outline-none ${valueInputIsInvalid ? '' : 'focus-within:border-[#7A7A7A]'}`}>
+            <div className={`flex flex-row w-full ${isTextArea ? `h-[${textAreaHeight}rem]` : 'h-[4rem]'} bg-[#FFFFFF] rounded-[1rem] border-[0.13rem] ${valueInputIsInvalid ? 'border-[#EE392F]' : 'border-[#FAFAFA]'} focus:outline-none ${valueInputIsInvalid ? '' : 'focus-within:border-[#7A7A7A]'} shadow-md`}>
                 {isTextArea ? 
                     (
                         <textarea 

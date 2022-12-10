@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['hydrobud-media.s3.us-west-2.amazonaws.com']
+    domains: ['hydrobud-images.s3.us-west-2.amazonaws.com']
   }
 }
 

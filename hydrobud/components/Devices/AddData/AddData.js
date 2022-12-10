@@ -2,32 +2,32 @@ import React, { useState, useEffect } from 'react'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { serverTimestamp } from 'firebase/firestore'
-import { useRouter } from 'next/router'
 
-import { addDataToDevice, createDeviceDataListener } from '../../services/firebase/devices'
-import { validatePpm, validateTemperature } from '../../utils/validateInput'
+import { addDataToDevice, createDeviceDataListener } from '../../../services/firebase/devices'
+import { validatePpm, validateTemperature } from '../../../utils/validateInput'
 
 // importing custom components
-import Button from '../Button'
-import Input from '../Input'
-import Toggle from '../Toggle'
-import Alert from '../Alert'
+import Button from '../../Button'
+import Input from '../../Input'
+import Toggle from '../../Toggle'
+import Alert from '../../Alert'
+import Level from './Level'
+import ToggleMetric from './ToggleMetric'
 
 // importing custom hooks
-import useAlert from '../../hooks/use-alert'
+import useAlert from '../../../hooks/use-alert'
+import useInput from '../../../hooks/use-input'
 
-// importing custom hooks
-import useInput from '../../hooks/use-input'
 
 const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
-    const router = useRouter()
-
-    const [isLevel, setIsLevel] = useState(true)
     const [currentDeviceData, setDeviceData] = useState([])
-
     useEffect(() => {
         const unsubscribeDeviceData = createDeviceDataListener(deviceID, setDeviceData)
     }, [])
+
+    const [addPpm, setAddPpm] = useState(true)
+    const [addTemp, setAddTemp] = useState(true)
+    const [addLevel, setAddLevel] = useState(true)
 
     const {
         inputState: ppmState, 
@@ -55,38 +55,46 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
         touchTemperatureInput()
     }
 
-    //manage alert state
-    const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
-    const [alertType, setAlertType] = useState('')  
-    const closeAddDataModal = () => {
-        closeModal()
+    const [isLevel, setIsLevel] = useState('')
 
-        dispatchPpm({type:'INITIALIZE', value: ''})
-        dispatchTemperature({type:'INITIALIZE', value: ''})
-        setIsLevel(true)
-
-        untouchPpm()
-        untouchTemperatureInput()
+    const resetForm = () => {
+        dispatchPpm({type:'RESET', value: ''})
+        dispatchTemperature({type:'RESET', value: ''})
+        setIsLevel('')
+        setAddPpm(true)
+        setAddTemp(true)
+        setAddLevel(true)
     }
 
-    const addDataHandler = async (event) => {
+    const closeAddDataModal = () => {
+        resetForm()
+        closeModal()
+    }
 
+    useEffect(() => {
+        dispatchPpm({type:'INITIALIZE', value: '0'})
+        dispatchTemperature({type:'INITIALIZE', value: '0'})
+    },[isOpen])
+
+    const addDataHandler = async (event) => {
         event.preventDefault()
 
-        console.log('currentDeviceData', currentDeviceData)
+        let ppmToAdd = currentDeviceData[0]?.ppm !=null ? currentDeviceData[0].ppm : null
+        let tempToAdd = currentDeviceData[0]?.temp != null ? currentDeviceData[0].temp : null
+        let levelToAdd = currentDeviceData[0]?.level != null ? currentDeviceData[0].level : null
 
-        let ppmToAdd = currentDeviceData.ppm ? currentDeviceData.ppm : null
-        let tempToAdd = currentDeviceData.temp ? currentDeviceData.temp : null
-        let levelToAdd = currentDeviceData.level ? currentDeviceData.level : null
-
-        if(deviceMetrics.includes('ppm')){
+        if(deviceMetrics.includes('ppm') && addPpm){
             ppmToAdd = parseInt(ppm)
         } 
-        if (deviceMetrics.includes('temp')) {
+        if (deviceMetrics.includes('temp') && addTemp) {
             tempToAdd = parseInt(temperature)
         }
-        if (deviceMetrics.includes('level')){
-            levelToAdd = isLevel
+        if (deviceMetrics.includes('level') && addLevel){
+            if (isLevel === 'Above Water Level'){
+                levelToAdd = true
+            } else {
+                levelToAdd = false
+            }
         }
 
         const deviceData = {
@@ -95,54 +103,29 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             level: levelToAdd,
             timestamp: serverTimestamp()
         }
-        console.log('deviceData to submit: ', deviceData)
 
         try {
             await addDataToDevice(deviceID, deviceData)
-            setAlertType('success')
-            setAlertMessage(`Added data`)
-            // setAddDataAlertMessage(`Added data`)
         } catch (error) {
             throw error
-            setAlertType('error')
-            setAlertMessage('Failed to add data')
-            // setAddDataAlertMessage('Failed to add data')
         } finally {
-            closeModal()
-
-            dispatchPpm({type:'INITIALIZE', value: ''})
-            dispatchTemperature({type:'INITIALIZE', value: ''})
-            setIsLevel(true)
-            
-            // openAddDataAlert()
-            openAlert()
+            resetForm()
         }
-
-        // unsubscribeDeviceData()
     }
 
-    let formIsValid;
+    let formIsValid = addPpm || addTemp || addLevel
     if(deviceMetrics.includes('ppm')){
-        formIsValid = ppmIsValid
+        formIsValid = formIsValid && ppmIsValid
     } else if (deviceMetrics.includes('temp')) {
-        formIsValid = temperatureIsValid
+        formIsValid = formIsValid && temperatureIsValid
     } else if (deviceMetrics.includes('level')){
-        formIsValid = true
+        formIsValid = formIsValid && true
     } else {
-        formIsValid = ppmIsValid && temperatureIsValid
+        formIsValid = formIsValid && ppmIsValid && temperatureIsValid
     }
 
-    // console.log('device: ', deviceMetrics)
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeAddDataModal}>
                 <Transition.Child
@@ -172,15 +155,48 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
                             leaveTo='opacity-0 scale-95'
                         >
                             <Dialog.Panel className='flex flex-col min-w-fit px-[3rem] py-[2rem] space-y-[1rem] rounded-[1.5rem] bg-[#F0F0F0] text-left shadow-xl transition-all'>
+                                <div className='flex flex-col pb-[1.6rem] space-y-[0.8rem]'>
+                                    <div className='text-[1rem] font-semibold uppercase text-white bg-[#BAC0D0] rounded-[1rem] p-[1rem] shadow-md'>Toggle metric to include it when adding new data</div>
+                                    <div className='flex flex-row place-content-between space-x-[1.5rem]'>
+                                        {deviceMetrics.includes('ppm') ? (                                
+                                            <ToggleMetric 
+                                                label='ppm'
+                                                enabled={addPpm}
+                                                setEnabled={setAddPpm}
+                                            />
+                                        ) : (<></>)}
+                                        
+                                        {deviceMetrics.includes('temp') ? (                                
+                                            <ToggleMetric 
+                                                label='temp'
+                                                enabled={addTemp}
+                                                setEnabled={setAddTemp}
+                                            />
+                                        ) : (<></>)}
+
+                                        {deviceMetrics.includes('level') ? (                                
+                                            <ToggleMetric 
+                                                label='level'
+                                                enabled={addLevel}
+                                                setEnabled={setAddLevel}
+                                            />
+                                        ) : (<></>)}
+                                    </div>
+                                    {!addPpm && !addTemp && !addLevel ? (
+                                        <div className='text-[1rem] text-center uppercase text-[#EE392F]'>Must have one metric selected when adding data</div>)
+                                        :(<></>)
+                                    }
+                                </div>
+                              
                                 {deviceMetrics.includes('ppm') ? (                                
-                                <Input 
-                                    label='PPM (mg/L)'
-                                    inputType='number'
-                                    value={ppm}
-                                    onChangeHandler={ppmChangeHandler}
-                                    valueInputIsInvalid={ppmInputIsInvalid}
-                                    valueError={ppmError}
-                                />
+                                    <Input 
+                                        label='PPM (mg/L)'
+                                        inputType='number'
+                                        value={ppm}
+                                        onChangeHandler={ppmChangeHandler}
+                                        valueInputIsInvalid={ppmInputIsInvalid}
+                                        valueError={ppmError}
+                                    />
                                 ) : (<></>)}
 
                                 {deviceMetrics.includes('temp') ? (
@@ -195,11 +211,10 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
                                 ) : (<></>)}
                                
                                 {deviceMetrics.includes('level') ? (
-                                    <div className='py-[1rem]'>
-                                        <Toggle 
-                                            label={'Level:'}
-                                            enabled={isLevel}
-                                            setEnabled={setIsLevel}
+                                    <div className='flex flex-row py-[1rem]'>
+                                        <Level
+                                            isLevel={isLevel}
+                                            setIsLevel={setIsLevel}
                                         />
                                     </div>
                                 ) : (<></>)}

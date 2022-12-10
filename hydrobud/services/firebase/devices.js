@@ -1,9 +1,17 @@
 import { doc, collection, query, where, orderBy, onSnapshot, deleteDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { firebaseDB } from './firebase-config'
+import { getAlarms } from './alert'
+
+const createDeviceCollection = () => {
+    return collection(firebaseDB, 'devices')
+}
+
+const createDeviceDoc = (deviceID) => {
+    return doc(firebaseDB, 'devices', deviceID)
+}
 
 const getDevicesQuery = (userID) => {
-    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID), orderBy('timestamp', 'desc'))
-    // const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID))
+    const q = query(collection(firebaseDB, 'devices'), where('userID', '==', userID), orderBy('favorite', 'desc'), orderBy('timestamp', 'desc'))
     return q
 } 
 
@@ -19,21 +27,8 @@ const getDeviceDataQuery = (deviceID) => {
 
 const createDevicesListener = (userID, devicesCallback) => {
     const unsubscribeDevices = onSnapshot(getDevicesQuery(userID), (snapshot) => {
-        // snapshot.docs.map(doc => console.log(doc.data()))
         const devices = snapshot.docs.map(doc => doc.data())
         devicesCallback(devices)
-
-        // snapshot.docChanges().forEach((change) => {
-        //     if (change.type === 'added') {
-        //         console.log('New device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'modified')s {
-        //         console.log('Modified device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'removed') {
-        //         console.log('Removed device: ', change.doc.data())
-        //     }
-        //   })
     })
 
     return unsubscribeDevices
@@ -41,7 +36,6 @@ const createDevicesListener = (userID, devicesCallback) => {
 
 const createDeviceListener = (deviceID, deviceCallback) => {
     const unsubscribeDevice = onSnapshot(getDeviceQuery(deviceID), (doc) => {
-        console.log("Current data: ", doc.data())
         deviceCallback(doc.data())
     })
 
@@ -50,35 +44,18 @@ const createDeviceListener = (deviceID, deviceCallback) => {
 
 const createDeviceDataListener = (deviceID, deviceDataCallback) => {
     const unsubscribeDevices = onSnapshot(getDeviceDataQuery(deviceID), (snapshot) => {
-        // snapshot.docs.map(doc => console.log(doc.data()))
         const deviceData = snapshot.docs.map(doc => doc.data())
-        console.log(deviceData)
         deviceDataCallback(deviceData)
-
-        // snapshot.docChanges().forEach((change) => {
-        //     if (change.type === 'added') {
-        //         console.log('New device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'modified')s {
-        //         console.log('Modified device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'removed') {
-        //         console.log('Removed device: ', change.doc.data())
-        //     }
-        //   })
+         
     })
 
     return unsubscribeDevices
 }
 
 const createDevice = async (deviceData) => {
-    // console.log('createDevice')
-    const deviceDocument = doc(collection(firebaseDB, 'devices'))
-    // console.log(deviceDocument)
-    // console.log(deviceDocument._key.path.segments[1])
+    const deviceDocument = doc(createDeviceCollection())
 
     const deviceDataWithDeviceID = {...deviceData, id: deviceDocument._key.path.segments[1]}
-    // console.log(deviceDataWithDeviceID)
 
     await setDoc(deviceDocument, deviceDataWithDeviceID)
 
@@ -86,10 +63,7 @@ const createDevice = async (deviceData) => {
 }
 
 const updateDevice = async (deviceID, deviceData) => {
-    console.log('updateDevice')
-    const deviceDocument = doc(firebaseDB, 'devices', deviceID)
-    console.log(deviceDocument)
-    // console.log(deviceDataWithDeviceID)
+    const deviceDocument = createDeviceDoc(deviceID)
 
     await updateDoc(deviceDocument, {
         name: deviceData.name,
@@ -102,17 +76,22 @@ const updateDevice = async (deviceID, deviceData) => {
 
 const deleteDevice = async (deviceID) => {
     try {
-        console.log('Deleting Device')
         await deleteDoc(doc(firebaseDB, 'devices', deviceID))
     } catch (error) {
         throw error
     }
 }
 
+const updateFavorite = async (deviceID, favorite) => {
+    const deviceDocument = createDeviceDoc(deviceID)
+
+    await updateDoc(deviceDocument, {
+      favorite: favorite
+    });
+  }
+
 const addDataToDevice = async (deviceID, data) => {
     const dataDocument = doc(collection(firebaseDB, 'device_data'))
-    console.log(dataDocument)
-    console.log(dataDocument._key.path.segments[1])
 
     const dataWithDeviceID = {...data, deviceID: deviceID}
 
@@ -121,15 +100,41 @@ const addDataToDevice = async (deviceID, data) => {
     return dataDocument._key.path.segments[1]
 }
 
+const getSharedDevicesQuery = (userID) => {
+    const q = query(createDeviceCollection(), where('sharedWith', 'array-contains-any', [userID]))
+    return q
+}
+
+const createSharedDeviceDataListener = (userID, sharedDeviceDataCallback) => {
+    const unsubscribeDevices = onSnapshot(getSharedDevicesQuery(userID), (snapshot) => {
+        const sharedDeviceData = snapshot.docs.map(doc => doc.data())
+        sharedDeviceDataCallback(sharedDeviceData)
+    })
+
+    return unsubscribeDevices
+}
+
+const updateSharedDevices = async (deviceID, sharedWith) => {
+    const deviceDocument = createDeviceDoc(deviceID)
+
+    await updateDoc(deviceDocument, {
+        sharedWith: sharedWith
+    })
+}
+
 export { 
+    createDeviceDoc,
     getDevicesQuery, 
     getDeviceQuery,
     getDeviceDataQuery, 
     createDevice, 
     updateDevice, 
     deleteDevice,
+    updateFavorite,
     addDataToDevice,
     createDeviceListener, 
     createDevicesListener, 
-    createDeviceDataListener
+    createDeviceDataListener,
+    createSharedDeviceDataListener,
+    updateSharedDevices
 }

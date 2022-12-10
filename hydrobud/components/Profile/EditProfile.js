@@ -1,31 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { serverTimestamp } from 'firebase/firestore'
-import { useRouter } from 'next/router'
 
-import { addDataToDevice } from '../../services/firebase/devices'
-import { validatePpm, validateTemperature } from '../../utils/validateInput'
-import { validateUsername } from '../../utils/validateInput'
-import { getUser, creteUserListener, updateUser} from '../../services/firebase/firebase-auth'
+import { validateUsername, validateBio } from '../../utils/validateInput'
+import { updateUser} from '../../services/firebase/firebase-auth'
 import { uploadImageToHydrobudMedia } from '../../services/s3'
 import { objectIsEmpty } from '../../utils/helper'
 
 // importing custom components
 import Button from '../Button'
 import Input from '../Input'
-import Toggle from '../Toggle'
-import Alert from '../Alert'
 
 // importing custom context 
 import { useAuthContext } from '../../context/AuthContext'
 
 // importing custom hooks
-import useAlert from '../../hooks/use-alert'
 import useInput from '../../hooks/use-input'
 
 const EditProfile = ({isOpen, closeModal}) => {
-    const { currentUser } = useAuthContext()
+    const { currentUser, currentUserData} = useAuthContext()
 
     const {
         inputState: usernameState, 
@@ -37,6 +30,18 @@ const EditProfile = ({isOpen, closeModal}) => {
     const usernameChangeHandler = (event) => {
         dispatchUsername({type:'USER_INPUT', value: event.target.value})
         touchUsernameInput()
+    }
+
+    const {
+        inputState: bioState, 
+        dispatchInput: dispatchBio, 
+        touchValueInput: touchBioInput,
+        valueInputIsInvalid: bioInputIsInvalid,
+    } = useInput(validateBio)
+    const {value: bio, valueIsValid: bioIsValid, errorMessage: bioError} = bioState
+    const bioChangeHandler = (event) => {
+        dispatchBio({type:'USER_INPUT', value: event.target.value})
+        touchBioInput()
     }
 
     const [selectedImage, setSelectedImage] = useState({})
@@ -58,58 +63,43 @@ const EditProfile = ({isOpen, closeModal}) => {
     }
 
     useEffect(() => {
-        const getCurrentUser = async () => {
-            try {
-                const user = await getUser(currentUser.uid)
-                dispatchUsername({type:'USER_INPUT', value: user.username})
-                setSelectedImage({file: null, path: user.imageURI})
-                
-            } catch (error) {
-                console.log(error)
-            }
+        if (currentUser && !objectIsEmpty(currentUserData)) {
+            dispatchUsername({type:'INITIALIZE', value: currentUserData.username})
+            dispatchBio({type:'RESET', value: currentUserData.bio})
+            setSelectedImage({file: null, path: currentUserData.imageURI})
         }
 
-        getCurrentUser()
-    }, [isOpen])
+    }, [isOpen, currentUserData])
 
     const updateUserHandler = async (event) => {
         event.preventDefault()
 
-        let imageURI = ''
-        if (!objectIsEmpty(selectedImage)) {
-            console.log('selectedImage.file: ', selectedImage.file)
+        let imageURI = currentUserData.imageURI
+        if (selectedImage.file) {
             const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
             if (imageData) {
                 imageURI = imageData.uri
-                // console.log(image)
             }
         }
 
         const userData = {
             username: username,
+            bio: bio,
             imageURI: imageURI
         }
-        console.log(userData)
 
         try {
             await updateUser(currentUser.uid, userData)
         } catch (error) {
-            console.log(error)
         } finally {
             closeModal()
         }
     }
 
+    const formIsValid = usernameIsValid && bioIsValid
+
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeModal}>
                 <Transition.Child
@@ -140,7 +130,7 @@ const EditProfile = ({isOpen, closeModal}) => {
                         >
                             <Dialog.Panel className='flex flex-col w-[38rem] px-[3rem] py-[2rem] space-y-[1rem] rounded-[1.5rem] bg-[#F0F0F0] text-left shadow-xl transition-all'>
                                 <div className='flex flex-row w-full'>
-                                    <label htmlFor="profile-picture" className='relative flex justify-center items-center w-[7rem] h-[7rem] rounded-full cursor-pointer'>
+                                    <label htmlFor='profile-picture' className='relative flex justify-center items-center w-[7rem] h-[7rem] rounded-full cursor-pointer'>
                                         <img 
                                             src={selectedImage.path} 
                                             className='absolute w-[7rem] h-[7rem] rounded-full'
@@ -166,21 +156,22 @@ const EditProfile = ({isOpen, closeModal}) => {
                                 </div>
                                 
 
-                                {/* <Input 
-                                    id='description'
+                                <Input 
+                                    id='bio'
                                     label={'Bio'}
                                     isTextArea={true}
-                                    // value={description} 
-                                    // onChangeHandler={descriptionChangeHandler}
-                                    // valueInputIsInvalid={!descriptionIsValid}
-                                    // valueError={descriptionError}
-                                /> */}
+                                    textAreaHeight={11}
+                                    value={bio} 
+                                    onChangeHandler={bioChangeHandler}
+                                    valueInputIsInvalid={!bioIsValid}
+                                    valueError={bioError}
+                                />
                           
                           
                                 <div className='flex justify-center pt-[1rem]'>
                                     <Button
                                         onClickHandler={updateUserHandler}
-                                        isDisabled={!usernameIsValid}
+                                        isDisabled={!formIsValid}
                                         colors = {{bgColor: 'B6CB9E', hoverBgColor: '9CBA96'}}
                                     >
                                         Update Profile

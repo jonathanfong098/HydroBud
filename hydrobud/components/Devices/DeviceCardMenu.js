@@ -6,25 +6,18 @@ import Image from 'next/image'
 import { deleteDevice as deleteDeviceRequest} from '../../services/firebase/devices'
 
 // importing custom components
-// import ForwardPropsLink from '../ForwardPropsLink'
 import Alert from '../Alert'
 import LogoMenuItem from '../LogoMenuItem'
-import AddData from './AddData'
+import AddData from './AddData/AddData'
+import SharedDevicesMenu from '../SharedDevices/SharedDevicesMenu'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'
 
 const DeviceCardMenu = ({device}) => {
-    const { alertIsOpen, openAlert, closeAlert } = useAlert()
-    // const {
-    //     alertIsOpen: addDataAlertIsOpen, 
-    //     openAlert: open, 
-    //     closeAlert: closeAddDataAlert, 
-    //     alertMessage: addDataAlertMessage, 
-    //     setAlertMessage: setAddDataAlertMessage
-    // } = useAlert()
-    // const [alertType, setAlertType] = useState('')  
-    const { alertIsOpen: modalOpen, openAlert: openModal, closeAlert: closeModal} = useAlert()
+    const { alertIsOpen: deleteIsOpen, openAlert: openDelete, closeAlert: closeDelete } = useAlert() 
+    const { alertIsOpen: addDataIsOpen, openAlert: openAddData, closeAlert: closeAddData} = useAlert()
+    const { alertIsOpen: shareMenuIsOpen, openAlert: openShareMenu, closeAlert: closeShareMenu} = useAlert()
 
     const confirmHandler = (deviceID) => {
         deleteDeviceRequest(deviceID)
@@ -42,8 +35,8 @@ const DeviceCardMenu = ({device}) => {
     return (
         <>
             <Alert 
-                isOpen={alertIsOpen}
-                closeModal={closeAlert}
+                isOpen={deleteIsOpen}
+                closeModal={closeDelete}
                 isConfirm={true} 
                 modalTitle={'Are you sure you want to delete this device?'}
                 confirmHandler={confirmHandler}
@@ -52,22 +45,16 @@ const DeviceCardMenu = ({device}) => {
                     deviceID: device.id
                 }}
             />
-              {/* <Alert 
-                isOpen={addDataAlertIsOpen} 
-                closeModal={closeAddDataAlert} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={addDataAlertMessage}
-            /> */}
             <AddData 
-                isOpen={modalOpen} 
-                closeModal={closeModal}
+                isOpen={addDataIsOpen} 
+                closeModal={closeAddData}
                 deviceID={device.id}
                 deviceMetrics={device.metrics}
-                // openAddDataAlert={open}
-                // setAlertType={setAlertType}
-                // setAddDataAlertMessage={setAddDataAlertMessage}
+            />
+            <SharedDevicesMenu
+                isOpen={shareMenuIsOpen}
+                closeModal={closeShareMenu}
+                device={device}
             />
             <Menu>
                 <Menu.Button>
@@ -89,47 +76,41 @@ const DeviceCardMenu = ({device}) => {
                 >
                     <Menu.Items className='flex flex-col absolute w-[10rem] divide-y divide-gray-100 mt-[-0.8rem] rounded-[1rem] bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                         <LogoMenuItem
+                            label='Copy ID'
+                            src='/images/duplicate.svg'
+                            alt='duplicate'
+                            onClickHandler={copyDeviceIDHandler}
+                            hover={{style:'hover:bg-[#B6CB9E] hover:rounded-t-[1rem] hover: cursor-pointer'}}
+                        />
+                        <LogoMenuItem
                             label='Edit'
                             src='/images/pencil_square.svg'
+                            isLink={true}
                             href={`/edit-device/${device.id}`}
                             alt='edit_data'
+                            hover={{style:'hover:bg-[#B6CB9E]'}}
                         />
-                        <Menu.Item>
-                            <div className={`flex flex-row justify-center items-center py-[0.8rem] space-x-[0.5rem] w-full leading-[2.5rem]`}>
-                                <div className='relative w-[1.5rem] h-[1.5rem]'>
-                                    <Image
-                                        src='/images/duplicate.svg'
-                                        layout='fill'
-                                        alt='trash'
-                                    />
-                                </div>
-                                <button onClick={copyDeviceIDHandler}>Copy ID</button>
-                            </div>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <div className={`flex flex-row justify-center items-center py-[0.8rem] space-x-[0.5rem] w-full leading-[2.5rem]`}>
-                                <div className='relative w-[1.5rem] h-[1.5rem]'>
-                                    <Image
-                                        src='/images/trash.svg'
-                                        layout='fill'
-                                        alt='trash'
-                                    />
-                                </div>
-                                <button onClick={() => {openAlert()}}>Delete</button>
-                            </div>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <div className={`flex flex-row justify-center items-center py-[0.8rem] space-x-[0.5rem] w-full leading-[2.5rem]`}>
-                                <div className='relative w-[1.5rem] h-[1.5rem]'>
-                                    <Image
-                                        src='/images/plus.svg'
-                                        layout='fill'
-                                        alt='trash'
-                                    />
-                                </div>
-                                <button onClick={() => {openModal()}}>Add Data</button>
-                            </div>
-                        </Menu.Item>
+                        <LogoMenuItem
+                            label='Delete'
+                            src='/images/trash.svg'
+                            alt='delete'
+                            onClickHandler={openDelete}
+                            hover={{style:'hover:bg-[#B6CB9E] hover: cursor-pointer'}}
+                        />
+                        <LogoMenuItem
+                            label='Add Data'
+                            src='/images/plus.svg'
+                            alt='add data'
+                            onClickHandler={openAddData}
+                            hover={{style:'hover:bg-[#B6CB9E] hover: cursor-pointer'}}
+                        />
+                        <LogoMenuItem
+                            label='Share'
+                            alt='share_device'
+                            src='/images/share_device.svg'
+                            onClickHandler={openShareMenu}
+                            hover={{style:'hover:bg-[#B6CB9E] hover:rounded-b-[1rem] hover: cursor-pointer'}}
+                        />
                     </Menu.Items>
                 </Transition>
             </Menu>

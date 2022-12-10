@@ -12,9 +12,7 @@ const AuthGuard = ({children}) => {
 
   useEffect(() => {
     if (!initializing) {
-      //auth is initialized and there is no user
       if (!currentUser) {
-        // remember the page that user tried to access
         setRedirect(SIGN_IN_REDIRECT_KEY, router.route)
         router.push('/login')
       }
