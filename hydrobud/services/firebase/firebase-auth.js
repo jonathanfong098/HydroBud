@@ -2,6 +2,10 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswor
 import { collection, addDoc, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, query , orderBy} from 'firebase/firestore'
 import { firebaseAuth, firebaseDB } from './firebase-config'
 
+const createUsersCollection = () => {
+  return collection(firebaseDB, 'users')
+}
+
 const createUserDoc = (userID) => {
   return doc(firebaseDB, 'users', userID)
 }
@@ -36,7 +40,7 @@ const getUser = async (userID) => {
   const currentUser = await getDoc(docRef)
 
   if (currentUser) {
-    console.log('user data', currentUser.data())
+    // console.log('user data', currentUser.data())
     return currentUser.data()
   } else {
     throw new Error('user does not exist ')
@@ -44,12 +48,34 @@ const getUser = async (userID) => {
 }
 
 const creteUserListener = (userID, userCallback) => {
-    const unsubscribeUser = onSnapshot(doc(firebaseDB, 'users', userID), (doc) => {
+  console.log('creteUserListener', userID)
+    const unsubscribeUser = onSnapshot(createUserDoc(userID), (doc) => {
       console.log("Current data: ", doc.data());
       userCallback(doc.data())
   });
 
   return unsubscribeUser
+}
+
+const getUsersQuery = () => {
+  return query(createUsersCollection())
+}
+
+const createUsersListener = async (usersCallback) => {
+  const unsubscribeUsers = onSnapshot(getUsersQuery(), (snapshot) => {
+    // snapshot.docs.map(doc => console.log(doc.data()))
+    const usersData = snapshot.docs.map(doc => {
+      //  console.log('doc', doc)
+      const data = doc.data()
+      // console.log('users', data)
+      return {...data, id:doc._key.path.segments[6]}
+    })
+    console.log('usersData', usersData)
+    usersCallback(usersData)
+     
+  })
+
+  return unsubscribeUsers
 }
 
 const updateUser = async (userID, userData) => {
@@ -147,5 +173,6 @@ export {
           createNotificationsListener,
           createNotification,
           deleteNotification,
-          errorMessage
+          errorMessage,
+          createUsersListener
         }

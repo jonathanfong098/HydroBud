@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 
 // importing custom components
-import DeviceCard from "./DeviceCard"
+import SharedDeviceCard from "./SharedDeviceCard"
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 //importing custom context
 import { useAuthContext } from '../../context/AuthContext'
 
-const DeviceCardList = ({devices}) => {
+const SharedDevicesCardList = ({devices}) => {
     const {currentUser} = useAuthContext()
 
     const [devicesSearchResult, setDevicesSearchResult] = useState([]);
@@ -36,14 +36,12 @@ const DeviceCardList = ({devices}) => {
 
     return (
         <div className='flex flex-col w-[41rem] h-full items-center space-y-[3rem] pt-[4rem] pb-[2rem] bg-[#F0F0F0]'>
-                <div className='text-[3rem] font-semibold'>Your Devices</div>
+                <div className='text-[3rem] font-semibold'>Your Shared Devices</div>
                 <div className='w-full'>
                      <ReactSearchAutocomplete
                         items={devices}
                         onSearch={handleOnSearch}
-                        // onHover={handleOnHover}
                         onSelect={handleOnSelect}
-                        // onFocus={handleOnFocus}
                         autoFocus
                         formatResult={formatResult}
                         style={searchBarStyle}
@@ -53,7 +51,7 @@ const DeviceCardList = ({devices}) => {
             { devicesSearchResult.length > 0 ? (
                 devicesSearchResult.map((device) => {
                     return (
-                        <DeviceCard 
+                        <SharedDeviceCard 
                             key={device.id} 
                             device={device}
                         />
@@ -62,7 +60,7 @@ const DeviceCardList = ({devices}) => {
             ) : (
                 devices.map((device) => {
                     return (
-                        <DeviceCard 
+                        <SharedDeviceCard 
                             key={device.id} 
                             device={device}
                         />
@@ -74,4 +72,4 @@ const DeviceCardList = ({devices}) => {
     )
 }
 
-export default DeviceCardList
+export default SharedDevicesCardList

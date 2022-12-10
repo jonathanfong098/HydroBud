@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Fragment } from 'react'
-import { Dialog, Transition, Tab } from '@headlessui/react'
+import { Dialog, Transition  } from '@headlessui/react'
 
 // importing custom components
 import AlarmOptions from './AlarmOptions'
@@ -8,14 +8,6 @@ import AlarmOptions from './AlarmOptions'
 const AddAlarm = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeModal}>
                     <Transition.Child

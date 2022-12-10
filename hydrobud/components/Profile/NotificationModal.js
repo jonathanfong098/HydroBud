@@ -75,6 +75,7 @@ const NotificationModal = ({isOpen, closeModal, user, setNumberOfNotifications})
                                                         userID={user.uid}
                                                         message={notification.message}
                                                         description={notification.description}
+                                                        timestamp={notification.timestamp}
                                                     />
                                                 )
                                             })) : (<></>)

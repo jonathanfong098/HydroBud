@@ -12,13 +12,12 @@ import Input from '../../Input'
 import Toggle from '../../Toggle'
 import Alert from '../../Alert'
 import Level from './Level'
+import ToggleMetric from './ToggleMetric'
 
 // importing custom hooks
 import useAlert from '../../../hooks/use-alert'
-
-// importing custom hooks
 import useInput from '../../../hooks/use-input'
-import ToggleMetric from './ToggleMetric'
+
 
 const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
     const [currentDeviceData, setDeviceData] = useState([])
@@ -85,9 +84,9 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
 
         console.log('currentDeviceData', currentDeviceData)
 
-        let ppmToAdd = currentDeviceData[0].ppm !=null ? currentDeviceData[0].ppm : null
-        let tempToAdd = currentDeviceData[0].temp != null ? currentDeviceData[0].temp : null
-        let levelToAdd = currentDeviceData[0].level != null ? currentDeviceData[0].level : null
+        let ppmToAdd = currentDeviceData[0]?.ppm !=null ? currentDeviceData[0].ppm : null
+        let tempToAdd = currentDeviceData[0]?.temp != null ? currentDeviceData[0].temp : null
+        let levelToAdd = currentDeviceData[0]?.level != null ? currentDeviceData[0].level : null
 
         if(deviceMetrics.includes('ppm') && addPpm){
             ppmToAdd = parseInt(ppm)
@@ -122,12 +121,12 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             setAlertMessage('Failed to add data')
             // setAddDataAlertMessage('Failed to add data')
         } finally {
-            closeModal()
+            // closeModal()
 
             resetForm()
             
             // openAddDataAlert()
-            openAlert()
+            // openAlert()
         }
 
         // unsubscribeDeviceData()

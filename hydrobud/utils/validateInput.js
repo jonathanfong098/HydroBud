@@ -1,35 +1,5 @@
 import { includesUppercaseLetter, includesLowercaseLetter, includesSpecialCharacter, includesWhitespace, validEmail } from './helper'
 
-// TODO: generalize validate function
-// export const validateValue = (value, validateCallback) => {
-//     let valueIsValid = false
-
-//     let error = validateCallback(value, valueIsValid)
-
-//     console.log(valueIsValid, error)
-
-//     return {
-//         valueIsValid: valueIsValid,
-//         errorMessage: error
-//     }
-// }
-
-// export const validateDeviceName = (value) => {
-//     const valueIsEmpty = value.trim() == ''
-//     // console.log(valueIsValid, errorMessage)
-
-//     if (valueIsEmpty) {
-//         return 'Device name cannot be empty'
-//     } else {
-//         value = true
-//         return ''
-//     }
-// }
-
-// export const test = (value) => {
-//     validateValue(value, validateDeviceName)
-// }
-
 const validateEmail = (value) => {
     let emailIsValid = false
     let errorMessage = ''
@@ -269,6 +239,22 @@ const validateAlarmDescription = (value) => {
     }
 }
 
+const emailToShareWith = (value) => {
+    let emailToShareWithIsValid = false
+    let errorMessage = ''
+
+    if (!validEmail(value) && value != '') {
+        errorMessage = 'Email is not valid'
+    } else {
+        emailToShareWithIsValid = true
+    }
+
+    return {
+        valueIsValid: emailToShareWithIsValid,
+        errorMessage: errorMessage
+    }
+}
+
 
 
 export { 
@@ -283,7 +269,8 @@ export {
     validatePpm,
     validateTemperature,
     validateAlarmName,
-    validateAlarmDescription
+    validateAlarmDescription,
+    emailToShareWith
 }
 
  

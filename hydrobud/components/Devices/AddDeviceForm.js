@@ -133,9 +133,10 @@ const AddDeviceForm = () => {
                 imageURI: imageURI,
                 metrics: metricsArray,
                 favorite: false,
+                sharedWith: [],
                 timestamp: serverTimestamp()
             }
-            console.log('deviceData: ', deviceData)
+            // console.log('deviceData: ', deviceData)
 
             const deviceID = await createDevice(deviceData)
             setAlertType('success')

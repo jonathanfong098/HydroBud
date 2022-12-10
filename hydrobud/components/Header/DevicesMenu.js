@@ -28,6 +28,7 @@ const DevicesMenu = ({label}) => {
                             isLink={true}
                             href='/dashboard'
                             hover={{style:'hover:bg-[#B6CB9E] hover:rounded-t-[1rem]'}}
+                            deviceMenu
                         />
                         <LogoMenuItem
                             label='View Devices'
@@ -36,6 +37,16 @@ const DevicesMenu = ({label}) => {
                             href='/devices'
                             isLink={true}
                             hover={{style:'hover:bg-[#B6CB9E]'}}
+                            deviceMenu
+                        />
+                        <LogoMenuItem
+                            label='View Shared Devices'
+                            src='/images/view_devices.svg'
+                            alt='shared_devices'
+                            href='/shared-devices'
+                            isLink={true}
+                            hover={{style:'hover:bg-[#B6CB9E]'}}
+                            deviceMenu
                         />
                         <LogoMenuItem
                             label='Add Device'
@@ -44,6 +55,7 @@ const DevicesMenu = ({label}) => {
                             href='/add-device'
                             isLink={true}
                             hover={{style:'hover:bg-[#B6CB9E] hover:rounded-b-[1rem]'}}
+                            deviceMenu
                         />
                     </Menu.Items>
                 </Transition>

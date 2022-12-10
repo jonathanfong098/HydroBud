@@ -34,7 +34,6 @@ const LoginForm = () => {
         setPassword(event.target.value)
     }
 
-    // manages whether password is visible 
     const [passwordVisible, setPasswordVisible] = useState(false)
     const showPassword = (event) => {
         event.preventDefault()
@@ -45,7 +44,6 @@ const LoginForm = () => {
 
     const loginHandler = async (event) => {
         event.preventDefault()
-        console.log('Form: Signing Up')
 
         try {
             await login(email, password)
@@ -55,7 +53,6 @@ const LoginForm = () => {
                 router.push('/dashboard')
             }
         } catch (error) {
-            console.log(error.code)
             setAlertMessage(errorMessage(error.code))
             openAlert()
         }
@@ -64,7 +61,14 @@ const LoginForm = () => {
 
     return(
         <>
-            <Alert isOpen={alertIsOpen} closeModal={closeAlert} isAlert={true} alertType={'error'} modalTitle={'Error'} alertMessage={alertMessage}/>
+            <Alert 
+                isOpen={alertIsOpen} 
+                closeModal={closeAlert} 
+                isAlert={true} 
+                alertType={'error'} 
+                modalTitle={'Error'} 
+                alertMessage={alertMessage}
+            />
             <form 
                 className='flex flex-col w-2/5 h-full justify-center space-y-[4rem]'
                 onSubmit={loginHandler}

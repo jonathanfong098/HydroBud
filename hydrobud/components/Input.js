@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 
 const Input = ({children, isTextArea, textAreaHeight, inputType, id, name, label, value, onChangeHandler, valueInputIsInvalid, valueError}) => {
     return (

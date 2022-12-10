@@ -36,7 +36,10 @@ const DeviceCard = ({device}) => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center w-full min-h-fit py-[3rem] rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md' id={`device-${device.id}`}>
+        <div 
+            className='flex flex-col justify-center items-center w-full min-h-fit py-[3rem] rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md' 
+            id={`device-${device.id}`}
+        >
             <div className='flex flex-col justify-center w-5/6 space-y-[1rem]'>
                 <div className='flex flex-row items-center w-full h-fit space-x-[1rem]'>
                     <h1 className='text-4xl text-[#9CBA96] font-bold'>

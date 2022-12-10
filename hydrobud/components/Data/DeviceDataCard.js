@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import ReactSpeedometer from 'react-d3-speedometer'
 
 import { createDeviceDataListener } from '../../services/firebase/devices';
 import { createAlarmsListener, setOffAlarm } from '../../services/firebase/alert';
 
 // importing custom components
 import DataCardMenu from './DataCardMenu';
-import ReactSpeedometer from 'react-d3-speedometer';
 
 // importing custom context 
 import { useAuthContext } from '../../context/AuthContext';
@@ -14,8 +14,8 @@ import { useAuthContext } from '../../context/AuthContext';
 const DeviceDataCard = ({device}) => {
     const {currentUser} = useAuthContext()
 
-    console.log('deviceID:', device.id)
-    console.log('currentUser.id: ', currentUser.uid)
+    // console.log('deviceID:', device.id)
+    // console.log('currentUser.id: ', currentUser.uid)
     const [deviceData, setDeviceData] = useState([])
     const [deviceAlarms, setDeviceAlarms] = useState([])
     
@@ -70,7 +70,7 @@ const DeviceDataCard = ({device}) => {
                     {/* <h2 className='text-lg font-normal'>{`#Updated: ${deviceData[0]?.timestamp.toDate().toDateString()}`}</h2> */}
                     
                     <div className='flex flex-row justify-center w-full pt-[1rem] space-x-[3rem] h-[11rem]'>
-                        {deviceData[0].level != null ? (
+                        {deviceData[0]?.level != null ? (
                             <ReactSpeedometer
                                 width={250}
                                 height={250} 
@@ -89,7 +89,7 @@ const DeviceDataCard = ({device}) => {
                             />
                         ):(<></>)}
                         
-                        {deviceData[0].ppm !=null ? (
+                        {deviceData[0]?.ppm !=null ? (
                             <ReactSpeedometer
                                 width={250}
                                 height={250} 
@@ -108,7 +108,7 @@ const DeviceDataCard = ({device}) => {
                             />
                         ):(<></>)}
 
-                         {deviceData[0].temp != null ? (
+                         {deviceData[0]?.temp != null ? (
                               <ReactSpeedometer
                               width={250}
                               height={250} 

@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useState, useEffect } from 'react'
 
-import { createDevicesListener } from '../services/firebase/devices'
+import { createDevicesListener, createSharedDeviceDataListener } from '../services/firebase/devices'
 
 // importing custom context
 import { useAuthContext } from './AuthContext'
@@ -16,21 +16,22 @@ const useDeviceContext = () => {
 }
 
 const DevicesProvider = ({children}) => {
-    const [devices, setDevices] = useState([])
-    // const [unsubscribeDevices, setUnsubscribeDevices] = useState()
     const { currentUser, initializing } = useAuthContext()
+
+    const [devices, setDevices] = useState([])
+    const [sharedDevices, setSharedDevices] = useState([])
+    
  
     useEffect(() => {
         if (!initializing && currentUser) {
             const unsubscribeDevices = createDevicesListener(currentUser.uid, setDevices)
+            const unsubscribeSharedDevice = createSharedDeviceDataListener(currentUser.uid, setSharedDevices)
         }
-
-        // setUnsubscribeDevices(unsubscribeDevices)
     }, [])
 
     const devicesContext = {
         devices: devices,
-        // unsubscribeDevices: unsubscribeDevices
+        sharedDevices: sharedDevices
     }
 
     return (

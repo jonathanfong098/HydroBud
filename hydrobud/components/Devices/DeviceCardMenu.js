@@ -6,10 +6,10 @@ import Image from 'next/image'
 import { deleteDevice as deleteDeviceRequest} from '../../services/firebase/devices'
 
 // importing custom components
-// import ForwardPropsLink from '../ForwardPropsLink'
 import Alert from '../Alert'
 import LogoMenuItem from '../LogoMenuItem'
 import AddData from './AddData/AddData'
+import SharedDevicesMenu from '../SharedDevices/SharedDevicesMenu'
 
 // importing custom hooks
 import useAlert from '../../hooks/use-alert'
@@ -25,6 +25,7 @@ const DeviceCardMenu = ({device}) => {
     // } = useAlert()
     // const [alertType, setAlertType] = useState('')  
     const { alertIsOpen: addDataIsOpen, openAlert: openAddData, closeAlert: closeAddData} = useAlert()
+    const { alertIsOpen: shareMenuIsOpen, openAlert: openShareMenu, closeAlert: closeShareMenu} = useAlert()
 
     const confirmHandler = (deviceID) => {
         deleteDeviceRequest(deviceID)
@@ -65,9 +66,11 @@ const DeviceCardMenu = ({device}) => {
                 closeModal={closeAddData}
                 deviceID={device.id}
                 deviceMetrics={device.metrics}
-                // openAddDataAlert={open}
-                // setAlertType={setAlertType}
-                // setAddDataAlertMessage={setAddDataAlertMessage}
+            />
+            <SharedDevicesMenu
+                isOpen={shareMenuIsOpen}
+                closeModal={closeShareMenu}
+                device={device}
             />
             <Menu>
                 <Menu.Button>
@@ -91,6 +94,7 @@ const DeviceCardMenu = ({device}) => {
                         <LogoMenuItem
                             label='Copy ID'
                             src='/images/duplicate.svg'
+                            alt='duplicate'
                             onClickHandler={copyDeviceIDHandler}
                             hover={{style:'hover:bg-[#B6CB9E] hover:rounded-t-[1rem] hover: cursor-pointer'}}
                         />
@@ -105,16 +109,24 @@ const DeviceCardMenu = ({device}) => {
                         <LogoMenuItem
                             label='Delete'
                             src='/images/trash.svg'
+                            alt='delete'
                             onClickHandler={openDelete}
                             hover={{style:'hover:bg-[#B6CB9E] hover: cursor-pointer'}}
                         />
                         <LogoMenuItem
                             label='Add Data'
                             src='/images/plus.svg'
+                            alt='add data'
                             onClickHandler={openAddData}
+                            hover={{style:'hover:bg-[#B6CB9E] hover: cursor-pointer'}}
+                        />
+                        <LogoMenuItem
+                            label='Share'
+                            alt='share_device'
+                            src='/images/share_device.svg'
+                            onClickHandler={openShareMenu}
                             hover={{style:'hover:bg-[#B6CB9E] hover:rounded-b-[1rem] hover: cursor-pointer'}}
                         />
-                
                     </Menu.Items>
                 </Transition>
             </Menu>

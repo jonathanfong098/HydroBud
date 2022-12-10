@@ -7,7 +7,6 @@ import { validatePassword, validateConfirmPassword, validateUsername, validateEm
 import { signup } from '../../services/firebase/firebase-auth'
 
 // importing custom components
-// import AuthenticationPage from '../../components/Layout/AuthenticationPage'
 import Alert from '../Alert'
 import Button from '../Button'
 import Input from '../Input'
@@ -39,7 +38,6 @@ const SignupForm = () => {
         touchEmailInput()
     }
 
-    // manages username input
     const {
         inputState: usernameState, 
         dispatchInput: dispatchUsername,
@@ -52,7 +50,6 @@ const SignupForm = () => {
         touchUsernameInput()
     }
 
-    // manages password input
     const {
         inputState: passwordState, 
         dispatchInput: dispatchPassword,
@@ -65,7 +62,6 @@ const SignupForm = () => {
         touchPasswordInput()
     }
 
-    // manages confirm password input
     const [confirmPassword, setConfirmPassword] = useState('')
     const {valueIsValid: confirmPasswordIsValid, errorMessage: confirmPasswordError} = validateConfirmPassword(password, confirmPassword)
     const[confirmPasswordInputTouched, setConfirmPasswordInputTouched] = useState(false)
@@ -77,7 +73,6 @@ const SignupForm = () => {
     }
     const confirmPasswordInputIsInvalid = (!passwordIsValid && confirmPasswordInputTouched) || (!confirmPasswordIsValid && confirmPasswordInputTouched) 
 
-    // manages whether password is visible 
     const [passwordVisible, setPasswordVisible] = useState(false)
     const showPassword = (event) => {
         event.preventDefault()
@@ -86,7 +81,6 @@ const SignupForm = () => {
 
     const signupHandler = async (event) => {
         event.preventDefault()
-        console.log('Form: Signing Up')
 
         try {
             await signup(email, username, password)
@@ -97,10 +91,8 @@ const SignupForm = () => {
         }
     }
     
-    //manage alert state
     const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
 
-    // manages if form can be submitted 
     const formIsValid = emailIsValid && usernameIsValid && passwordIsValid && confirmPasswordIsValid 
 
     return(
@@ -110,7 +102,6 @@ const SignupForm = () => {
                 className='flex flex-col w-2/5 max-[20rem] h-full justify-center space-y-[0.9rem]'
                 onSubmit={signupHandler}
             >
-                {/* email text box*/}
                 <Input 
                     name={'email'}
                     label={'Email'}
@@ -120,7 +111,6 @@ const SignupForm = () => {
                     valueError={emailError}
                 />
 
-                {/* username text box*/}
                 <Input 
                     name={'username'}
                     label={'Username'}
@@ -130,7 +120,6 @@ const SignupForm = () => {
                     valueError={usernameError}
                 />
 
-                {/* password text box*/}
                 <Input 
                     name={'password'}
                     label={'Password'}
@@ -154,7 +143,6 @@ const SignupForm = () => {
                     </div>
                 </Input>
 
-                {/* confirm password text box*/}
                 <Input 
                     name={'confirm_password'}
                     label={'Confirm Password'}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 // importing custom components
 import DeviceDataCard from "./DeviceDataCard"
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const DeviceDataCardList = ({devices}) => {
     const [devicesSearchResult, setDevicesSearchResult] = useState([])
