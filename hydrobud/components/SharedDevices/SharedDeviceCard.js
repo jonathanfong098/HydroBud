@@ -4,11 +4,6 @@ import ReactSpeedometer from 'react-d3-speedometer'
 import { createDeviceDataListener } from '../../services/firebase/devices'
 import { getUser as getUserRequest} from '../../services/firebase/firebase-auth'
 
-
-
-import Link from 'next/link'
-import Image from 'next/image'
-
 const SharedDeviceCard = ({device}) => {
     const [deviceData, setDeviceData] = useState([])
     const [deviceOwner, setDeviceOwner] = useState('')
@@ -19,7 +14,6 @@ const SharedDeviceCard = ({device}) => {
 
             const getUser = async() => {
                 const user = await getUserRequest(device.userID)
-                console.log('user', user)
                 setDeviceOwner(user.username)
             }
 

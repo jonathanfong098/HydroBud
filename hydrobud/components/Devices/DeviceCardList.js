@@ -4,12 +4,7 @@ import React, { useState } from 'react'
 import DeviceCard from "./DeviceCard"
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
-//importing custom context
-import { useAuthContext } from '../../context/AuthContext'
-
 const DeviceCardList = ({devices}) => {
-    const {currentUser} = useAuthContext()
-
     const [devicesSearchResult, setDevicesSearchResult] = useState([]);
 
     const searchBarStyle = {
@@ -18,11 +13,9 @@ const DeviceCardList = ({devices}) => {
 
     const handleOnSearch = (string, results) => {
         setDevicesSearchResult(results)
-        console.log(string, results)
     }
 
     const handleOnSelect = (item) => {
-        console.log(item)
         setDevicesSearchResult([item])
     }
     const formatResult = (item) => {
@@ -41,9 +34,7 @@ const DeviceCardList = ({devices}) => {
                      <ReactSearchAutocomplete
                         items={devices}
                         onSearch={handleOnSearch}
-                        // onHover={handleOnHover}
                         onSelect={handleOnSelect}
-                        // onFocus={handleOnFocus}
                         autoFocus
                         formatResult={formatResult}
                         style={searchBarStyle}

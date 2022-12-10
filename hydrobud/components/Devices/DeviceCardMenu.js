@@ -15,15 +15,7 @@ import SharedDevicesMenu from '../SharedDevices/SharedDevicesMenu'
 import useAlert from '../../hooks/use-alert'
 
 const DeviceCardMenu = ({device}) => {
-    const { alertIsOpen: deleteIsOpen, openAlert: openDelete, closeAlert: closeDelete } = useAlert()
-    // const {
-    //     alertIsOpen: addDataAlertIsOpen, 
-    //     openAlert: open, 
-    //     closeAlert: closeAddDataAlert, 
-    //     alertMessage: addDataAlertMessage, 
-    //     setAlertMessage: setAddDataAlertMessage
-    // } = useAlert()
-    // const [alertType, setAlertType] = useState('')  
+    const { alertIsOpen: deleteIsOpen, openAlert: openDelete, closeAlert: closeDelete } = useAlert() 
     const { alertIsOpen: addDataIsOpen, openAlert: openAddData, closeAlert: closeAddData} = useAlert()
     const { alertIsOpen: shareMenuIsOpen, openAlert: openShareMenu, closeAlert: closeShareMenu} = useAlert()
 
@@ -53,14 +45,6 @@ const DeviceCardMenu = ({device}) => {
                     deviceID: device.id
                 }}
             />
-              {/* <Alert 
-                isOpen={addDataAlertIsOpen} 
-                closeModal={closeAddDataAlert} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={addDataAlertMessage}
-            /> */}
             <AddData 
                 isOpen={addDataIsOpen} 
                 closeModal={closeAddData}

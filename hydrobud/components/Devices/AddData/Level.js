@@ -24,7 +24,7 @@ const Level = ({isLevel, setIsLevel}) => {
                     cursor-pointer rounded-[1rem] p-[1rem] shadow-md focus:outline-none`
                 }
               >
-                {({ active, checked }) => (
+                {({ checked }) => (
                   <>
                         <div className="text-[1rem]">
                           <RadioGroup.Label

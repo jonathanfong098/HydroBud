@@ -1,14 +1,8 @@
 import { S3 } from '@aws-sdk/client-s3'
 
 const params = {
-    Bucket: 'hydrobud-media',
+    Bucket: 'hydrobud-images',
 }
-
-const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY
-const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY
-
-// console.log(process.env.REACT_AWS_ACCESS_KEY)
-// console.log(process.env.REACT_AWS_SECRET_KEY)
 
 const getS3Client = async () => {
     const client = new S3({
@@ -31,11 +25,10 @@ const uploadImageToHydrobudMedia = async (data)=> {
               await client.putObject({...params, Body: data, ContentType: data.type, Key: fileName})
               
               const imageData = {
-                uri: `https://hydrobud-media.s3.us-west-2.amazonaws.com/${fileName}`,
+                uri: `https://hydrobud-images.s3.us-west-2.amazonaws.com/${fileName}`,
                 type: data.type || 'image/jpeg',
                 altTag: ''
               }
-            //   console.log(imageData)
   
               resolve(imageData)
             } catch (error) {

@@ -69,7 +69,6 @@ const DevicesMenu = ({label}) => {
                         className={`flex flex-row justify-center items-center py-[0.8rem] space-x-[0.5rem] w-full leading-[2.5rem] hover:bg-[#B6CB9E] hover:rounded-b-[1rem] hover: cursor-pointer`}
                         onClick={openNotifications}
                     >
-                        {/* <div className='w-[2.6rem] h-full rounded-full bg-[#9CBA96] text-center text-white'>{numberOfNotifications}</div> */}
                         <div className='flex items-center justify-center relative w-[2.2rem] h-[2.2rem]'>
                         <Image
                             src='/images/notifications.svg'

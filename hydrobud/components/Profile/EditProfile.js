@@ -10,13 +10,11 @@ import { objectIsEmpty } from '../../utils/helper'
 // importing custom components
 import Button from '../Button'
 import Input from '../Input'
-import Alert from '../Alert'
 
 // importing custom context 
 import { useAuthContext } from '../../context/AuthContext'
 
 // importing custom hooks
-import useAlert from '../../hooks/use-alert'
 import useInput from '../../hooks/use-input'
 
 const EditProfile = ({isOpen, closeModal}) => {
@@ -78,7 +76,6 @@ const EditProfile = ({isOpen, closeModal}) => {
 
         let imageURI = currentUserData.imageURI
         if (selectedImage.file) {
-            console.log('selectedImage.file: ', selectedImage.file)
             const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
             if (imageData) {
                 imageURI = imageData.uri
@@ -90,12 +87,10 @@ const EditProfile = ({isOpen, closeModal}) => {
             bio: bio,
             imageURI: imageURI
         }
-        console.log(userData)
 
         try {
             await updateUser(currentUser.uid, userData)
         } catch (error) {
-            console.log(error)
         } finally {
             closeModal()
         }
@@ -105,14 +100,6 @@ const EditProfile = ({isOpen, closeModal}) => {
 
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeModal}>
                 <Transition.Child
@@ -143,7 +130,7 @@ const EditProfile = ({isOpen, closeModal}) => {
                         >
                             <Dialog.Panel className='flex flex-col w-[38rem] px-[3rem] py-[2rem] space-y-[1rem] rounded-[1.5rem] bg-[#F0F0F0] text-left shadow-xl transition-all'>
                                 <div className='flex flex-row w-full'>
-                                    <label htmlFor="profile-picture" className='relative flex justify-center items-center w-[7rem] h-[7rem] rounded-full cursor-pointer'>
+                                    <label htmlFor='profile-picture' className='relative flex justify-center items-center w-[7rem] h-[7rem] rounded-full cursor-pointer'>
                                         <img 
                                             src={selectedImage.path} 
                                             className='absolute w-[7rem] h-[7rem] rounded-full'

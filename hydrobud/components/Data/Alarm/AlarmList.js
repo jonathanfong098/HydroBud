@@ -15,14 +15,6 @@ const AddAlarm = ({isOpen, closeModal, deviceID}) => {
 
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeModal}>
                     <Transition.Child

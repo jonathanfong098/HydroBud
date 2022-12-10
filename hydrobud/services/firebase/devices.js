@@ -27,21 +27,8 @@ const getDeviceDataQuery = (deviceID) => {
 
 const createDevicesListener = (userID, devicesCallback) => {
     const unsubscribeDevices = onSnapshot(getDevicesQuery(userID), (snapshot) => {
-        // snapshot.docs.map(doc => console.log(doc.data()))
         const devices = snapshot.docs.map(doc => doc.data())
         devicesCallback(devices)
-
-        // snapshot.docChanges().forEach((change) => {
-        //     if (change.type === 'added') {
-        //         console.log('New device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'modified')s {
-        //         console.log('Modified device: ', change.doc.data())
-        //     }
-        //     if (change.type === 'removed') {
-        //         console.log('Removed device: ', change.doc.data())
-        //     }
-        //   })
     })
 
     return unsubscribeDevices
@@ -49,7 +36,6 @@ const createDevicesListener = (userID, devicesCallback) => {
 
 const createDeviceListener = (deviceID, deviceCallback) => {
     const unsubscribeDevice = onSnapshot(getDeviceQuery(deviceID), (doc) => {
-        console.log("Current data: ", doc.data())
         deviceCallback(doc.data())
     })
 
@@ -58,9 +44,7 @@ const createDeviceListener = (deviceID, deviceCallback) => {
 
 const createDeviceDataListener = (deviceID, deviceDataCallback) => {
     const unsubscribeDevices = onSnapshot(getDeviceDataQuery(deviceID), (snapshot) => {
-        // snapshot.docs.map(doc => console.log(doc.data()))
         const deviceData = snapshot.docs.map(doc => doc.data())
-        console.log(deviceData)
         deviceDataCallback(deviceData)
          
     })
@@ -69,13 +53,9 @@ const createDeviceDataListener = (deviceID, deviceDataCallback) => {
 }
 
 const createDevice = async (deviceData) => {
-    // console.log('createDevice')
     const deviceDocument = doc(createDeviceCollection())
-    // console.log(deviceDocument)
-    // console.log(deviceDocument._key.path.segments[1])
 
     const deviceDataWithDeviceID = {...deviceData, id: deviceDocument._key.path.segments[1]}
-    // console.log(deviceDataWithDeviceID)
 
     await setDoc(deviceDocument, deviceDataWithDeviceID)
 
@@ -83,11 +63,7 @@ const createDevice = async (deviceData) => {
 }
 
 const updateDevice = async (deviceID, deviceData) => {
-    console.log('updateDevice')
-    // const deviceDocument = doc(firebaseDB, 'devices', deviceID)
     const deviceDocument = createDeviceDoc(deviceID)
-    console.log(deviceDocument)
-    // console.log(deviceDataWithDeviceID)
 
     await updateDoc(deviceDocument, {
         name: deviceData.name,
@@ -100,7 +76,6 @@ const updateDevice = async (deviceID, deviceData) => {
 
 const deleteDevice = async (deviceID) => {
     try {
-        console.log('Deleting Device')
         await deleteDoc(doc(firebaseDB, 'devices', deviceID))
     } catch (error) {
         throw error
@@ -110,7 +85,6 @@ const deleteDevice = async (deviceID) => {
 const updateFavorite = async (deviceID, favorite) => {
     const deviceDocument = createDeviceDoc(deviceID)
 
-    // Set the "capital" field of the city 'DC'
     await updateDoc(deviceDocument, {
       favorite: favorite
     });
@@ -118,8 +92,6 @@ const updateFavorite = async (deviceID, favorite) => {
 
 const addDataToDevice = async (deviceID, data) => {
     const dataDocument = doc(collection(firebaseDB, 'device_data'))
-    console.log(dataDocument)
-    console.log(dataDocument._key.path.segments[1])
 
     const dataWithDeviceID = {...data, deviceID: deviceID}
 
@@ -134,10 +106,8 @@ const getSharedDevicesQuery = (userID) => {
 }
 
 const createSharedDeviceDataListener = (userID, sharedDeviceDataCallback) => {
-    console.log('createSharedDeviceDataListener', userID)
     const unsubscribeDevices = onSnapshot(getSharedDevicesQuery(userID), (snapshot) => {
         const sharedDeviceData = snapshot.docs.map(doc => doc.data())
-        console.log('sharedDeviceData', sharedDeviceData)
         sharedDeviceDataCallback(sharedDeviceData)
     })
 
@@ -146,8 +116,6 @@ const createSharedDeviceDataListener = (userID, sharedDeviceDataCallback) => {
 
 const updateSharedDevices = async (deviceID, sharedWith) => {
     const deviceDocument = createDeviceDoc(deviceID)
-    console.log(deviceDocument)
-    // // console.log(deviceDataWithDeviceID)
 
     await updateDoc(deviceDocument, {
         sharedWith: sharedWith

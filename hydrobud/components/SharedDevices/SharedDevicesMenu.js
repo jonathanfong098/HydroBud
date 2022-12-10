@@ -17,28 +17,14 @@ import { useAuthContext } from '../../context/AuthContext'
 const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
     const { currentUser, currentUserData } = useAuthContext()
 
-    console.log('device: ', device.sharedWith)
-    // device.sharedWith.map(test => {
-    //     console.log('test', test)
-    // })
-
     const[users, setUsers] = useState()
     const [selectedUser, setSelectedUser] = useState()
-    console.log('userSearchResults', selectedUser)
 
     useEffect(() => {
         const unsubscribeUsers = createUsersListener(setUsers)
     },[])
-
-    // const [email, setEmail] = useState('')
-    // const emailChangeHandler = (event) => {
-    //     setEmail(event.target.value)
-    // }
-    // const {valueIsValid: emailIsValid, errorMessage: emailError } = emailToShareWith(email)
     
     const handleOnSelect = (item) => {
-        // the item selected
-        console.log('handleonSelect', item)
         setSelectedUser(item)
     }
 
@@ -54,27 +40,22 @@ const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
     const shareHandler = async () => {
         try {
             if (currentUser.uid != selectedUser.id && !device.sharedWith.includes(selectedUser.id)){
-                console.log('selectedUser.id', selectedUser)
-                console.log('device.sharedWith', device.sharedWith)
                 let newSharedDevices
                 if (device.sharedWith.length > 0){
                     newSharedDevices = [...device.sharedWith, selectedUser.id]
                 } else {
                     newSharedDevices = [selectedUser.id]
                 }
-          
-                // console.log('device.sharedWith', newSharedDevices)
-                // if (!device.sharedWith.includes(selectedUser.id)){
                 await updateSharedDevices(device.id, newSharedDevices)
                 await createNotification(selectedUser.id, {
                     message: `${selectedUser.username} shared their device, ${device.name}, with you`,
                     description: 'Go to the shared devices page to view the device that has been shared with you',
                     timestamp: serverTimestamp()
                 })
-                // }
+                
             }
         } catch (error) {
-            console.log(error)
+            throw (error)
         }
     }
 
@@ -97,7 +78,6 @@ const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
                 <div className='fixed inset-0 overflow-y-auto'>
                     <div 
                         className='flex min-h-full items-center justify-center'
-                        // onSubmit={addDataHandler}
                     >
                         <Transition.Child
                             as={Fragment}
@@ -114,28 +94,17 @@ const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
                                 </div>
 
                                 <div 
-                                    // name={'email'}
-                                    // label={'Email'}
-                                    // // inputType={emailVisible ? 'text' : 'email'} 
-                                    // value={email} 
-                                    // onChangeHandler={emailChangeHandler}
-                                    // valueInputIsInvalid={!emailIsValid}
-                                    // valueError={emailError}
                                     className='flex flex-row w-full space-x-[1rem]'
                                 >
                                     <div className='w-full'>
                                         <ReactSearchAutocomplete
                                             items={users}
-                                            // onSearch={handleOnSearch}
-                                            // onHover={handleOnHover}
                                             onSelect={handleOnSelect}
-                                            // onFocus={handleOnFocus}
                                             autoFocus
                                             formatResult={formatResult}
-                                            // style={searchBarStyle}
                                             placeholder='Email or username'
-                                            fuseOptions={{ keys: ["email", "username"] }}
-                                            resultStringKeyName="email"
+                                            fuseOptions={{ keys: ['email', 'username'] }}
+                                            resultStringKeyName='email'
                                     />
                                     </div>
 
@@ -159,10 +128,6 @@ const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
                                         )
                                     })}
                                 </div>
-                                
-                                {/* <UserSharedWith className='w-full h-fit bg-[#B6CB9E]' test={device.sharedWith[0]}></UserSharedWith> */}
-
-                             
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>

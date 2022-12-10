@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 // importing custom components
 import HeaderPage from '../../components/Layout/HeaderPage'
@@ -7,7 +7,7 @@ import SharedDevicesCardList from '../../components/SharedDevices/SharedDevicesC
 // importing custom context
 import { useDeviceContext } from '../../context/DeviceContext'
 
-const Devices = () => {
+const SharedDevices = () => {
     const {sharedDevices} = useDeviceContext()
     return (
         <HeaderPage>
@@ -18,6 +18,6 @@ const Devices = () => {
     )
 }
 
-Devices.requireAuth = true
+SharedDevices.requireAuth = true
 
-export default Devices
+export default SharedDevices

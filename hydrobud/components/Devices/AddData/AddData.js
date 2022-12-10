@@ -66,9 +66,6 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
         setAddLevel(true)
     }
 
-    //manage alert state
-    const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
-    const [alertType, setAlertType] = useState('')  
     const closeAddDataModal = () => {
         resetForm()
         closeModal()
@@ -81,8 +78,6 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
 
     const addDataHandler = async (event) => {
         event.preventDefault()
-
-        console.log('currentDeviceData', currentDeviceData)
 
         let ppmToAdd = currentDeviceData[0]?.ppm !=null ? currentDeviceData[0].ppm : null
         let tempToAdd = currentDeviceData[0]?.temp != null ? currentDeviceData[0].temp : null
@@ -108,28 +103,14 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
             level: levelToAdd,
             timestamp: serverTimestamp()
         }
-        console.log('deviceData to submit: ', deviceData)
 
         try {
             await addDataToDevice(deviceID, deviceData)
-            setAlertType('success')
-            setAlertMessage(`Added data`)
-            // setAddDataAlertMessage(`Added data`)
         } catch (error) {
-            // throw error
-            setAlertType('error')
-            setAlertMessage('Failed to add data')
-            // setAddDataAlertMessage('Failed to add data')
+            throw error
         } finally {
-            // closeModal()
-
             resetForm()
-            
-            // openAddDataAlert()
-            // openAlert()
         }
-
-        // unsubscribeDeviceData()
     }
 
     let formIsValid = addPpm || addTemp || addLevel
@@ -145,14 +126,6 @@ const AddData = ({isOpen, closeModal, deviceID, deviceMetrics}) => {
 
     return (
         <>
-             {/* <Alert 
-                isOpen={alertIsOpen} 
-                closeModal={closeAddDataModal} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={alertMessage}
-            /> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as='div' className='relative z-10' onClose={closeAddDataModal}>
                 <Transition.Child

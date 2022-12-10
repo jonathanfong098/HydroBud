@@ -14,23 +14,17 @@ import { useAuthContext } from '../../context/AuthContext';
 const DeviceDataCard = ({device}) => {
     const {currentUser} = useAuthContext()
 
-    // console.log('deviceID:', device.id)
-    // console.log('currentUser.id: ', currentUser.uid)
     const [deviceData, setDeviceData] = useState([])
     const [deviceAlarms, setDeviceAlarms] = useState([])
     
-
     useEffect(() => {
         const unsubscribeDeviceData = createDeviceDataListener(device.id, setDeviceData)
         const unsubscribeAlarms = createAlarmsListener(device.id, setDeviceAlarms)
     }, [])
 
     useEffect(() => {
-        // console.log('setting off alarm')
         for (const alarm of deviceAlarms){
             if (!alarm.on){
-                console.log('deviceData[0]', deviceData[0])
-                console.log('deviceAlarm', alarm)
                 if (!alarm.on){
                     if (alarm.type === 'ppm'){
                         setOffAlarm(alarm, deviceData[0].ppm, device, currentUser.uid)
@@ -49,7 +43,6 @@ const DeviceDataCard = ({device}) => {
     }, [deviceData])
     
     if (deviceData.length > 0) {
-        console.log('deviceData:', deviceData[0])
         return (
             <div 
                 className={`flex flex-col justify-center items-center ${deviceData.length > 0 ? 'min-w-fit': 'min-w-[34rem]'} min-h-fit rounded-[2rem] bg-[#FFFFFF] border-2 border-[#D7D9DE] shadow-md`}
@@ -81,10 +74,10 @@ const DeviceDataCard = ({device}) => {
                                 segments={2}
                                 value={deviceData[0].level ? 1 : 0}
                                 segmentColors={[
-                                    "#ec5555",
-                                    "#7ab55c",
+                                    '#ec5555',
+                                    '#7ab55c',
                                 ]}
-                                needleColor="#000080"
+                                needleColor='#000080'
                                 currentValueText='Water Level: ${value}'
                             />
                         ):(<></>)}
@@ -100,10 +93,10 @@ const DeviceDataCard = ({device}) => {
                                 segments={6}
                                 value={deviceData[0].ppm}
                                 segmentColors={[
-                                    "#7ab55c",
+                                    '#7ab55c',
                                     
                                 ]}
-                                needleColor="#000080"
+                                needleColor='#000080'
                                 currentValueText='PPM: ${value}'
                             />
                         ):(<></>)}
@@ -119,18 +112,18 @@ const DeviceDataCard = ({device}) => {
                               segments={10}
                               value={deviceData[0].temp}
                               segmentColors={[
-                                  "#ec5555",
-                                  "#ec5555",
-                                  "#ec5555",
-                                  "#ec5555",
-                                  "#ec5555",
-                                  "#ec5555",
-                                  "#f2db5b",
-                                  "#7ab55c",
-                                  "#f2db5b",
-                                  "#ec5555"
+                                  '#ec5555',
+                                  '#ec5555',
+                                  '#ec5555',
+                                  '#ec5555',
+                                  '#ec5555',
+                                  '#ec5555',
+                                  '#f2db5b',
+                                  '#7ab55c',
+                                  '#f2db5b',
+                                  '#ec5555'
                               ]}
-                              needleColor="#000080"
+                              needleColor='#000080'
                               currentValueText='Temperature(F): ${value}'
                           >
                             

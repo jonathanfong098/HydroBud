@@ -3,9 +3,7 @@ import { Fragment } from 'react'
 import { Menu, Transition} from '@headlessui/react'
 import Image from 'next/image'
 
-
 // importing custom components
-import Alert from '../Alert'
 import AddData from '../Devices/AddData/AddData'
 import AddAlarm from './Alarm/AddAlarm'
 import AlarmList from './Alarm/AlarmList'
@@ -17,24 +15,6 @@ const DataCardMenu = ({device}) => {
     const { alertIsOpen: addDataIsOpen, openAlert: openAddData, closeAlert: closeAddData} = useAlert()
     const { alertIsOpen: addAlarmIsOpen, openAlert: openAddAlarm, closeAlert: closeAddAlarm} = useAlert()
     const { alertIsOpen: alarmListIsOpen, openAlert: openAlarmList, closeAlert: closeAlarmList} = useAlert() 
-
-    const { alertIsOpen, openAlert, closeAlert } = useAlert()
-    // const {
-    //     alertIsOpen: addDataAlertIsOpen, 
-    //     openAlert: open, 
-    //     closeAlert: closeAddDataAlert, 
-    //     alertMessage: addDataAlertMessage, 
-    //     setAlertMessage: setAddDataAlertMessage
-    // } = useAlert()
-    // const [alertType, setAlertType] = useState('')  
-
-    // const {alertIsOpen: createdAlarmIsOpen, openAlert: openCreatedAlarm, closeAlert: closeCreatedAlarm, alertMessage: createdAlarmMessage, setAlertMessage: setCreatedAlarmMessage} = useAlert()
-    // const [createdAlarmType, setCreatedAlarmType] = useState('')  
-    // const createdAlarmFunctions = {
-    //     setCreatedAlarmType: setCreatedAlarmType,
-    //     openCreatedAlarm: openCreatedAlarm,
-    //     setCreatedAlarmMessage: setCreatedAlarmMessage,
-    // }
 
     const confirmHandler = (deviceID) => {
         deleteDeviceRequest(deviceID)
@@ -51,32 +31,6 @@ const DataCardMenu = ({device}) => {
 
     return (
         <>
-            <Alert 
-                isOpen={alertIsOpen}
-                closeModal={closeAlert}
-                isConfirm={true} 
-                modalTitle={'Are you sure you want to delete this device?'}
-                confirmHandler={confirmHandler}
-                confirmData={{
-                    deviceID: device.id
-                }}
-            />
-            {/* <Alert 
-                isOpen={createdAlarmIsOpen} 
-                closeModal={closeCreatedAlarm} 
-                isAlert={true} 
-                alertType={createdAlarmType} 
-                modalTitle={createdAlarmType} 
-                alertMessage={createdAlarmMessage}
-            /> */}
-              {/* <Alert 
-                isOpen={addDataAlertIsOpen} 
-                closeModal={closeAddDataAlert} 
-                isAlert={true} 
-                alertType={alertType} 
-                modalTitle={alertType} 
-                alertMessage={addDataAlertMessage}
-            /> */}
             <AddData 
                 isOpen={addDataIsOpen} 
                 closeModal={closeAddData}
@@ -88,8 +42,6 @@ const DataCardMenu = ({device}) => {
                 closeModal={closeAddAlarm}
                 deviceID={device.id}
                 deviceMetrics={device.metrics}
-                // setCreatedAlarmMessage={setCreatedAlarmMessage}
-                // setCreatedAlarmType={setCreatedAlarmType}
             />
             <AlarmList 
                 isOpen={alarmListIsOpen} 

@@ -5,7 +5,6 @@ import { serverTimestamp } from 'firebase/firestore'
 import { validateDeviceName, validateDeviceMonitor, validateDeviceDescription} from '../../utils/validateInput'
 import { createDevice } from '../../services/firebase/devices'
 import { uploadImageToHydrobudMedia } from '../../services/s3'
-import { objectIsEmpty } from '../../utils/helper'
 
 // importing custom components 
 import Input from '../Input'
@@ -16,7 +15,6 @@ import Alert from '../Alert'
 // importing custom hooks
 import useInput from '../../hooks/use-input'
 import useAlert from '../../hooks/use-alert'
-
 
 // importing custom context
 import { useAuthContext } from '../../context/AuthContext'
@@ -107,7 +105,6 @@ const AddDeviceForm = () => {
             let imageURI = null;
 
             if (selectedImage.file != null) {
-                console.log('hi')
                 const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
                 if (imageData) {
                     imageURI = imageData.uri
@@ -136,13 +133,11 @@ const AddDeviceForm = () => {
                 sharedWith: [],
                 timestamp: serverTimestamp()
             }
-            // console.log('deviceData: ', deviceData)
 
             const deviceID = await createDevice(deviceData)
             setAlertType('success')
             setAlertMessage(`Created device ${name}\n with device ID ${deviceID}`)
         } catch (error) {
-            console.log('error', error)
             setAlertType('error')
             setAlertMessage('Failed to create device')
         } finally {

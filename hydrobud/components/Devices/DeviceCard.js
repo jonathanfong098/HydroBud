@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 // importing custom components
-import DeviceCardMenu from "./DeviceCardMenu"
-import Metric from "./Metric"
+import DeviceCardMenu from './DeviceCardMenu'
+import Metric from './Metric'
 import { updateFavorite } from '../../services/firebase/devices'
 
 const DeviceCard = ({device}) => {
@@ -27,7 +27,7 @@ const DeviceCard = ({device}) => {
                 try {
                     await updateFavorite(device.id, !device.favorite)
                 } catch (error) {
-                    console.log(error)
+                    throw (error)
                 }
             } else {
                 await updateFavorite(device.id, true)

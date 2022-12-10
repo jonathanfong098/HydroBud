@@ -8,10 +8,8 @@ const createAlarmDoc = (deviceID, alarmID) => {
 }
 
 const createAlert = async (deviceID, alertData) => {
-    console.log('alertData', alertData)
     const deviceDoc = createDeviceDoc(deviceID)
     const alertCol = collection(deviceDoc, 'alarms')
-    // await addDoc(alertCol, alertData)
     const alertDoc = await addDoc(alertCol, alertData)
 
     return alertDoc.id
@@ -25,8 +23,6 @@ const getAlarms = (deviceID) => {
 const createAlarmsListener = (deviceID, alarmsCallback) => {
     const unsubscribeAlarms = onSnapshot(getAlarms(deviceID), (snapshot) => {
     const alarms = snapshot.docs.map(doc => {
-        // console.log('message: ', doc)
-        //  console.log('message id: ', doc.id)
         const data = doc.data()
         return {...data, id: doc.id}
     }) 
@@ -38,11 +34,8 @@ const createAlarmsListener = (deviceID, alarmsCallback) => {
 }
 
 const setOffAlarm = async (alarm, deviceData, device, userID) => {
-    console.log('setOffAlarm', alarm, deviceData)
     if (alarm.type === 'ppm' || alarm.type === 'temp'){
-        console.log('alarm.type === ppm|| alarm.type === temp')
         if (alarm.comparison === 'Greater') {
-            console.log('deviceData > alarm.threshold')
             if (deviceData > alarm.threshold) {
                 if (!alarm.on){
                     await toggleAlarm(device.id, alarm.id, alarm.on)
@@ -54,7 +47,6 @@ const setOffAlarm = async (alarm, deviceData, device, userID) => {
                 }
             }
         } else if (alarm.comparison === 'Greater/Equal') {
-            console.log('deviceData >= alarm.threshold')
             if (deviceData >= alarm.threshold) {
                 if (!alarm.on){
                     await toggleAlarm(device.id, alarm.id, alarm.on)
@@ -66,7 +58,6 @@ const setOffAlarm = async (alarm, deviceData, device, userID) => {
                 }
             }
         } else if (alarm.comparison === 'Lower/Equal') {
-            console.log('deviceData <= alarm.threshold')
             if (deviceData <= alarm.threshold) {
                 if (!alarm.on){
                     await toggleAlarm(device.id, alarm.id, alarm.on)
@@ -78,7 +69,6 @@ const setOffAlarm = async (alarm, deviceData, device, userID) => {
                 }
             }
         } else if (alarm.comparison === 'Lower') {
-            console.log('deviceData < alarm.threshold')
             if (deviceData < alarm.threshold) {
                 if (!alarm.on){
                     await toggleAlarm(device.id, alarm.id, alarm.on)
@@ -94,7 +84,6 @@ const setOffAlarm = async (alarm, deviceData, device, userID) => {
         } 
     } else if (alarm.type === 'level') {
         if (alarm.threshold  === deviceData){
-            console.log('alarm.threshold  === deviceData')
             if (!alarm.on){
                 await toggleAlarm(device.id, alarm.id, alarm.on)
                 await createNotification(userID, {
@@ -105,7 +94,6 @@ const setOffAlarm = async (alarm, deviceData, device, userID) => {
             }
         } 
     } else {
-        console.log('noting')
         return
     }
             

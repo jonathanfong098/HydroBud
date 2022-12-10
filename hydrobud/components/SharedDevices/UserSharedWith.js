@@ -7,8 +7,6 @@ import { createNotification } from '../../services/firebase/firebase-auth'
 
 const UserSharedWith = (userID) => {
     const [user, setUser] = useState()
-    console.log('user', userID)
-    // console.log('device', device)
     
     useEffect(() => {
         const unsubscribeUser = creteUserListener(userID.userID, setUser)

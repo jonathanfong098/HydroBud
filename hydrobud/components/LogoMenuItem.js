@@ -18,7 +18,6 @@ const LogoMenuItem = ({label, src, isLink, href, alt, onClickHandler, hover, dev
                             />
                         </div>
                         <div>
-                            {/* <ForwardPropsLink href={href}></ForwardPropsLink> */}
                             {label}
                         </div>
                     </div>

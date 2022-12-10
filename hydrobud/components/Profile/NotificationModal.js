@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Fragment } from 'react'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import { serverTimestamp } from 'firebase/firestore'
-import { useRouter } from 'next/router'
+import { Dialog, Transition } from '@headlessui/react'
 
 import { createNotificationsListener } from '../../services/firebase/firebase-auth'
 
 // importing custom components
-// import NotificationList from './NotificationList'
 import Notification from './Notification'
-import Button from '../Button'
-import Input from '../Input'
-import Alert from '../Alert'
-
-// importing custom context 
-import { useAuthContext } from '../../context/AuthContext'
-
-// importing custom hooks
-import useAlert from '../../hooks/use-alert'
-import useInput from '../../hooks/use-input'
 
 const NotificationModal = ({isOpen, closeModal, user, setNumberOfNotifications}) => {
     const [notifications, setNotifications] = useState([])
@@ -32,8 +19,6 @@ const NotificationModal = ({isOpen, closeModal, user, setNumberOfNotifications})
     useEffect(() => {
         setNumberOfNotifications(notifications.length)
     }, [notifications])
-
-    console.log('notifications in modal: ', notifications)
 
     return (
         <>

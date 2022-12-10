@@ -16,7 +16,6 @@ import Alert from '../Alert'
 import useInput from '../../hooks/use-input'
 import useAlert from '../../hooks/use-alert'
 
-
 // importing custom context
 import { useAuthContext } from '../../context/AuthContext'
 
@@ -69,7 +68,6 @@ const EditDeviceForm = ({deviceID}) => {
 
     useEffect(() => {
         if (initialDeviceData) {
-            console.log('initialDeviceData: ', initialDeviceData)
             dispatchName({type:'USER_INPUT', value: initialDeviceData.name})
             dispatchMonitor({type:'USER_INPUT', value: initialDeviceData.monitor})
             setDescription(initialDeviceData.description)
@@ -86,11 +84,9 @@ const EditDeviceForm = ({deviceID}) => {
         }
     }, [initialDeviceData])
 
-    //manage alert state
     const {alertIsOpen, openAlert, closeAlert, alertMessage, setAlertMessage} = useAlert()
     const [alertType, setAlertType] = useState('')  
 
-    // manages if form can be submitted 
     const formIsValid = nameIsValid && monitorIsValid && descriptionIsValid 
     
     const metricOptionsAreValid = ppmMetricEnabled || tempMetricEnabled || levelMetricEnabled
@@ -117,7 +113,6 @@ const EditDeviceForm = ({deviceID}) => {
         try {
             let imageURI = initialDeviceData.imageURI
             if (selectedImage.file) {
-                console.log('selectedImage.file: ', selectedImage.file)
                 const imageData = await uploadImageToHydrobudMedia(selectedImage.file)
                 if (imageData) {
                     imageURI = imageData.uri
@@ -137,21 +132,17 @@ const EditDeviceForm = ({deviceID}) => {
             }
             
             const deviceData = {
-                // userID: currentUser.uid,
                 name: name,
                 monitor: monitor,
                 description: description,
                 imageURI: imageURI,
                 metrics: metricsArray,
-                // timestamp: serverTimestamp()
             }
-            console.log('deviceData: ', deviceData)
 
             await updateDevice(deviceID, deviceData)
             setAlertType('success')
-            setAlertMessage(`Updated device ${name}`)
+            setAlertMessage(`Updated device`)
         } catch (error) {
-            // throw error
             setAlertType('error')
             setAlertMessage('Failed to update device')
         } finally {

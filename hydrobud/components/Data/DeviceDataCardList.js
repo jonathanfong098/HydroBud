@@ -2,26 +2,20 @@ import React, { useState } from 'react'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 // importing custom components
-import DeviceDataCard from "./DeviceDataCard"
+import DeviceDataCard from './DeviceDataCard'
 
 const DeviceDataCardList = ({devices}) => {
     const [devicesSearchResult, setDevicesSearchResult] = useState([])
 
     const searchBarStyle = {
-        // width: '200px',
-        border: "2px solid #7A7A7A",
+        border: '2px solid #7A7A7A',
     }
 
     const handleOnSearch = (string, results) => {
-        // onSearch will have as the first callback parameter
-        // the string searched and for the second the results.
         setDevicesSearchResult(results)
-        console.log(string, results)
       }
     
       const handleOnSelect = (item) => {
-        // the item selected
-        console.log(item)
         setDevicesSearchResult([item])
       }
 
@@ -43,9 +37,7 @@ const DeviceDataCardList = ({devices}) => {
                      <ReactSearchAutocomplete
                         items={devices}
                         onSearch={handleOnSearch}
-                        // onHover={handleOnHover}
                         onSelect={handleOnSelect}
-                        // onFocus={handleOnFocus}
                         autoFocus
                         formatResult={formatResult}
                         style={searchBarStyle}

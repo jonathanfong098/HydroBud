@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 // importing custom components
-import SharedDeviceCard from "./SharedDeviceCard"
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import SharedDeviceCard from './SharedDeviceCard'
 
 //importing custom context
 import { useAuthContext } from '../../context/AuthContext'
@@ -13,16 +13,14 @@ const SharedDevicesCardList = ({devices}) => {
     const [devicesSearchResult, setDevicesSearchResult] = useState([]);
 
     const searchBarStyle = {
-        border: "2px solid #7A7A7A",
+        border: '2px solid #7A7A7A',
     }
 
     const handleOnSearch = (string, results) => {
         setDevicesSearchResult(results)
-        console.log(string, results)
     }
 
     const handleOnSelect = (item) => {
-        console.log(item)
         setDevicesSearchResult([item])
     }
     const formatResult = (item) => {

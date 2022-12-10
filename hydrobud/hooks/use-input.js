@@ -13,7 +13,6 @@ const useInput = (validateValue, initialValue = '') => {
               errorMessage: errorMessage,
             }
         } else if (type === 'RESET') {
-          console.log('resetting')
           return {
             value: value, 
             valueIsValid: true, 
