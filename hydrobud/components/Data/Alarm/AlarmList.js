@@ -44,8 +44,8 @@ const AddAlarm = ({isOpen, closeModal, deviceID}) => {
                             >
                                 <Dialog.Panel className='flex flex-col w-fit max-h-[40rem] overflow-y-auto p-[2rem] space-y-[2.5rem] rounded-[1.5rem] bg-[#F0F0F0] text-left shadow-xl transition-all'>
                                 <div className='flex flex-col items-center text-[1rem] font-semibold uppercase text-center'>
-                                    <div className='text-[#B6CB9E]'>Alarm is on</div>
-                                    <div className='text-[#EE392F]'>Alarm is off</div>
+                                    <div className='text-[#B6CB9E]'>Alarm is off</div>
+                                    <div className='text-[#EE392F]'>Alarm is on</div>
                                 </div>
                                     {
                                         deviceAlarms.map((deviceAlarm) => {
