@@ -121,6 +121,7 @@ const SharedDevicesMenu = ({isOpen, closeModal, device}) => {
                                     {device.sharedWith?.map((userID) => {
                                         return (
                                             <UserSharedWith
+                                                key={userID}
                                                 userID = {userID}
                                                 username={currentUserData.username}
                                                 device={device}

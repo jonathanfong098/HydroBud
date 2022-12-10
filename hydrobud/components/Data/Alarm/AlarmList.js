@@ -51,6 +51,7 @@ const AddAlarm = ({isOpen, closeModal, deviceID}) => {
                                         deviceAlarms.map((deviceAlarm) => {
                                             return (
                                                 <Alarm
+                                                    key={deviceID.id}
                                                     deviceID={deviceID}
                                                     alarm={deviceAlarm}
                                                 />
